@@ -267,9 +267,36 @@ button.secondary {
   cursor: pointer;
 }
 
+.recipe-name-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .recipe-name {
   color: var(--text-h);
   font-weight: 500;
+}
+
+.badge.ready {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.badge.short-badge {
+  background: var(--low-bg);
+  border: 1px solid var(--low-border);
+  color: var(--danger);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.recipe-unmatched {
+  font-size: 12px;
+  opacity: 0.6;
+  font-style: italic;
 }
 
 .recipe-style {

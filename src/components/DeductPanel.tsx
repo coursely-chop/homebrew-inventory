@@ -1,80 +1,22 @@
 import { useState } from "react";
 import { useInventory } from "../lib/InventoryContext";
-import { suggestMatch } from "../lib/ingredientMatch";
+import { buildIngredientRows, totalsByItem, type IngredientRow } from "../lib/recipeIngredients";
 import { round } from "../lib/format";
-import type { IngredientCategory, Recipe } from "../types";
-
-interface DeductRow {
-  key: string;
-  ingredientName: string;
-  category: IngredientCategory;
-  amountNeeded: number;
-  unit: string;
-  matchedItemId: string | null;
-}
-
-function buildRows(recipe: Recipe, items: ReturnType<typeof useInventory>["items"]): DeductRow[] {
-  const rows: DeductRow[] = [];
-
-  recipe.fermentables.forEach((f, i) => {
-    rows.push({
-      key: `f${i}`,
-      ingredientName: f.name,
-      category: "grain",
-      amountNeeded: f.amountLb,
-      unit: "lb",
-      matchedItemId: suggestMatch(f.name, "grain", items)?.id ?? null,
-    });
-  });
-
-  recipe.hops.forEach((h, i) => {
-    rows.push({
-      key: `h${i}`,
-      ingredientName: `${h.name} (${h.use})`,
-      category: "hops",
-      amountNeeded: h.amountOz,
-      unit: "oz",
-      matchedItemId: suggestMatch(h.name, "hops", items)?.id ?? null,
-    });
-  });
-
-  recipe.yeasts.forEach((y, i) => {
-    if (y.amountIsWeight) return;
-    rows.push({
-      key: `y${i}`,
-      ingredientName: y.name,
-      category: "yeast",
-      amountNeeded: y.amount,
-      unit: "packet",
-      matchedItemId: suggestMatch(y.name, "yeast", items)?.id ?? null,
-    });
-  });
-
-  return rows;
-}
+import type { Recipe } from "../types";
 
 export function DeductPanel({ recipe, onClose }: { recipe: Recipe; onClose: () => void }) {
   const { items, updateItem } = useInventory();
-  const [rows, setRows] = useState<DeductRow[]>(() => buildRows(recipe, items));
+  const [rows, setRows] = useState<IngredientRow[]>(() => buildIngredientRows(recipe, items));
   const [done, setDone] = useState(false);
 
   function setMatch(key: string, itemId: string) {
     setRows((prev) => prev.map((r) => (r.key === key ? { ...r, matchedItemId: itemId || null } : r)));
   }
 
-  // Several recipe rows (e.g. the same hop added at Boil, Hop Stand, and Dry
-  // Hop) commonly map to one inventory item — deduction has to sum those
-  // before touching the stored amount, not subtract once per row against a
-  // stale read of the same item.
-  const totalsByItem = new Map<string, number>();
-  for (const row of rows) {
-    if (row.matchedItemId) {
-      totalsByItem.set(row.matchedItemId, (totalsByItem.get(row.matchedItemId) ?? 0) + row.amountNeeded);
-    }
-  }
+  const totals = totalsByItem(rows);
 
   function handleConfirm() {
-    for (const [itemId, amountNeeded] of totalsByItem) {
+    for (const [itemId, amountNeeded] of totals) {
       const item = items.find((i) => i.id === itemId);
       if (!item) continue;
       updateItem({ ...item, amount: Math.max(0, item.amount - amountNeeded) });
@@ -108,7 +50,7 @@ export function DeductPanel({ recipe, onClose }: { recipe: Recipe; onClose: () =
         <tbody>
           {rows.map((row) => {
             const matched = items.find((i) => i.id === row.matchedItemId) ?? null;
-            const totalNeeded = row.matchedItemId ? totalsByItem.get(row.matchedItemId)! : null;
+            const totalNeeded = row.matchedItemId ? totals.get(row.matchedItemId)! : null;
             const after = matched && totalNeeded !== null ? matched.amount - totalNeeded : null;
             const short = after !== null && after < 0;
             return (
