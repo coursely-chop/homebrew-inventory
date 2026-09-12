@@ -11,6 +11,14 @@ const LOW_STOCK_THRESHOLD: Record<IngredientCategory, number> = {
   misc: 1,
 };
 
+export function isOutOfStock(item: InventoryItem): boolean {
+  return item.amount <= 0;
+}
+
+/** True for anything below threshold, out-of-stock included — use this for
+ * "does this need attention at all." For the Low tab specifically (as
+ * opposed to Out), exclude isOutOfStock separately so the two tabs don't
+ * duplicate each other. */
 export function isLowStock(item: InventoryItem): boolean {
   return item.amount < LOW_STOCK_THRESHOLD[item.category];
 }

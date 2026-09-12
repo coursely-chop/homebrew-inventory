@@ -1,12 +1,30 @@
 import { useState } from "react";
 import { useInventory } from "../lib/InventoryContext";
 import { ItemForm, type ItemFormValues } from "../components/ItemForm";
-import { CATEGORY_LABELS, CATEGORY_ORDER, daysSincePurchase, isLowStock } from "../lib/inventory";
+import { CATEGORY_LABELS, CATEGORY_ORDER, daysSincePurchase, isLowStock, isOutOfStock } from "../lib/inventory";
 import { round } from "../lib/format";
 import type { IngredientCategory, InventoryItem } from "../types";
 
+type ViewTab = "all" | "low" | "out";
+
+const TABS: { id: ViewTab; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "low", label: "Low" },
+  { id: "out", label: "Out" },
+];
+
+// "Low" and "Out" are mutually exclusive so the two tabs don't just repeat
+// each other — Out is for "can't brew with this at all," Low is "still
+// have some, but reorder before you plan around it."
+function matchesTab(item: InventoryItem, tab: ViewTab): boolean {
+  if (tab === "all") return true;
+  if (tab === "out") return isOutOfStock(item);
+  return isLowStock(item) && !isOutOfStock(item);
+}
+
 export function Inventory() {
   const { items, createItem, updateItem, removeItem } = useInventory();
+  const [tab, setTab] = useState<ViewTab>("all");
   const [addingCategory, setAddingCategory] = useState<IngredientCategory | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -20,25 +38,42 @@ export function Inventory() {
     setEditingId(null);
   }
 
+  const tabbedItems = items.filter((i) => matchesTab(i, tab));
+
   return (
     <div className="inventory">
       <header className="inventory-header">
         <h1>Inventory</h1>
       </header>
 
+      <div className="view-tabs">
+        {TABS.map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            className={`view-tab${tab === t.id ? " active" : ""}`}
+            onClick={() => setTab(t.id)}
+          >
+            {t.label} ({items.filter((i) => matchesTab(i, t.id)).length})
+          </button>
+        ))}
+      </div>
+
       {CATEGORY_ORDER.filter((category) => category !== "misc" || items.some((i) => i.category === "misc")).map(
         (category) => {
-          const categoryItems = items
-            .filter((i) => i.category === category)
-            .sort((a, b) => a.amount - b.amount);
+          const categoryItems = tabbedItems.filter((i) => i.category === category).sort((a, b) => a.amount - b.amount);
+
+          if (tab !== "all" && categoryItems.length === 0) return null;
 
           return (
             <section key={category} className="category-section">
               <div className="category-header">
                 <h2>{CATEGORY_LABELS[category]}</h2>
-                <button type="button" className="secondary" onClick={() => setAddingCategory(category)}>
-                  + Add
-                </button>
+                {tab === "all" && (
+                  <button type="button" className="secondary" onClick={() => setAddingCategory(category)}>
+                    + Add
+                  </button>
+                )}
               </div>
 
               {addingCategory === category && (
@@ -65,7 +100,11 @@ export function Inventory() {
                         {item.category === "hops" && item.alphaAcid !== undefined && (
                           <span className="item-aa">{item.alphaAcid}% AA</span>
                         )}
-                        {isLowStock(item) && <span className="badge low">low</span>}
+                        {isOutOfStock(item) ? (
+                          <span className="badge out">out</span>
+                        ) : (
+                          isLowStock(item) && <span className="badge low">low</span>
+                        )}
                       </div>
                       <div className="item-meta">
                         {item.notes && <span className="item-notes">{item.notes}</span>}
@@ -88,6 +127,8 @@ export function Inventory() {
           );
         }
       )}
+
+      {tab !== "all" && tabbedItems.length === 0 && <p className="empty">Nothing in this view.</p>}
     </div>
   );
 }
