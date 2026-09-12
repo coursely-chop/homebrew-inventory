@@ -13,7 +13,7 @@
     { "id": "hops-chinook", "category": "hops", "name": "Chinook", "amount": 2, "unit": "oz", "notes": "", "alphaAcid": 11.8, "purchaseDate": null },
     { "id": "hops-hallertau", "category": "hops", "name": "Hallertau", "amount": 1, "unit": "oz", "notes": "", "alphaAcid": 4, "purchaseDate": null },
     { "id": "hops-cascade", "category": "hops", "name": "Cascade", "amount": 1, "unit": "oz", "notes": "", "alphaAcid": 6.1, "purchaseDate": null },
-    { "id": "hops-vic-secret", "category": "hops", "name": "Vic Secret", "amount": 0.7, "unit": "oz", "notes": "", "alphaAcid": 15.5, "purchaseDate": null },
+    { "id": "hops-vic-secret", "category": "hops", "name": "Vic Secret", "amount": 0, "unit": "oz", "notes": "", "alphaAcid": 15.5, "purchaseDate": null },
     { "id": "hops-centennial", "category": "hops", "name": "Centennial", "amount": 0.61, "unit": "oz", "notes": "", "purchaseDate": null },
     { "id": "grain-us-2-row", "category": "grain", "name": "US 2-Row", "amount": 37, "unit": "lb", "notes": "", "purchaseDate": null },
     { "id": "grain-flaked-oats", "category": "grain", "name": "Flaked Oats", "amount": 12, "unit": "lb", "notes": "approximate", "purchaseDate": null },
