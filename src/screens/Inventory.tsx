@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useInventory } from "../lib/InventoryContext";
 import { ItemForm, type ItemFormValues } from "../components/ItemForm";
-import { CATEGORY_LABELS, CATEGORY_ORDER, daysSincePurchase, isLowStock, isOutOfStock } from "../lib/inventory";
+import { CATEGORY_LABELS, CATEGORY_ORDER, daysSincePurchase, isLowStock, isOutOfStock, outOfStockLabel } from "../lib/inventory";
 import { round } from "../lib/format";
 import type { IngredientCategory, InventoryItem } from "../types";
 
@@ -101,7 +101,7 @@ export function Inventory() {
                           <span className="item-aa">{item.alphaAcid}% AA</span>
                         )}
                         {isOutOfStock(item) ? (
-                          <span className="badge out">out</span>
+                          <span className="badge out">{outOfStockLabel(item)}</span>
                         ) : (
                           isLowStock(item) && <span className="badge low">low</span>
                         )}

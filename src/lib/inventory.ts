@@ -11,8 +11,19 @@ const LOW_STOCK_THRESHOLD: Record<IngredientCategory, number> = {
   misc: 1,
 };
 
+// A hop below this is too little for any real addition — not literally
+// zero, but "kicked" in the same sense as a keg: done, even if a few
+// crumbs remain in the bag. Other categories only count as depleted at
+// exactly zero.
+const KICKED_THRESHOLD = 0.1;
+
 export function isOutOfStock(item: InventoryItem): boolean {
-  return item.amount <= 0;
+  return item.category === "hops" ? item.amount < KICKED_THRESHOLD : item.amount <= 0;
+}
+
+/** "kicked" for a spent hop, "out" for anything else at zero. */
+export function outOfStockLabel(item: InventoryItem): string {
+  return item.category === "hops" ? "kicked" : "out";
 }
 
 /** True for anything below threshold, out-of-stock included — use this for
