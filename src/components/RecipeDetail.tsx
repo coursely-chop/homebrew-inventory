@@ -1,7 +1,11 @@
+import { useState } from "react";
 import type { Recipe } from "../types";
 import { formatMinutes, round } from "../lib/format";
+import { DeductPanel } from "./DeductPanel";
 
 export function RecipeDetail({ recipe }: { recipe: Recipe }) {
+  const [deducting, setDeducting] = useState(false);
+
   return (
     <div className="recipe-detail">
       <div className="recipe-stats">
@@ -14,6 +18,13 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
         <Stat label="Efficiency" value={`${round(recipe.efficiencyPct, 0)}%`} />
         <Stat label="Boil" value={`${recipe.boilTimeMin} min`} />
       </div>
+
+      <div className="recipe-actions">
+        <button type="button" onClick={() => setDeducting(true)}>
+          Brew this — deduct inventory
+        </button>
+      </div>
+      {deducting && <DeductPanel recipe={recipe} onClose={() => setDeducting(false)} />}
 
       <section>
         <h3>Fermentables</h3>

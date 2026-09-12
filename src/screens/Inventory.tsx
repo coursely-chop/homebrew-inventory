@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useInventory } from "../lib/InventoryContext";
 import { ItemForm, type ItemFormValues } from "../components/ItemForm";
 import { CATEGORY_LABELS, CATEGORY_ORDER, daysSincePurchase, isLowStock } from "../lib/inventory";
+import { round } from "../lib/format";
 import type { IngredientCategory, InventoryItem } from "../types";
 
 export function Inventory() {
@@ -59,7 +60,7 @@ export function Inventory() {
                       <div className="item-main">
                         <span className="item-name">{item.name}</span>
                         <span className="item-amount">
-                          {item.amount} {item.unit}
+                          {round(item.amount, 2)} {item.unit}
                         </span>
                         {isLowStock(item) && <span className="badge low">low</span>}
                       </div>

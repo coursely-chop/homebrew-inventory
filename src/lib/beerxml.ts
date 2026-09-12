@@ -75,6 +75,8 @@ export function parseBeerXML(xmlText: string, sourceFile: string, existingIds: s
     const yeasts: YeastAddition[] = Array.from(r.querySelectorAll(":scope > YEASTS > YEAST")).map((y) => ({
       name: text(y, "NAME"),
       form: text(y, "FORM"),
+      amount: num(y, "AMOUNT"),
+      amountIsWeight: text(y, "AMOUNT_IS_WEIGHT") === "true",
       displayAmount: text(y, "DISPLAY_AMOUNT"),
       attenuation: num(y, "ATTENUATION"),
     }));

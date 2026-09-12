@@ -358,3 +358,71 @@ button.secondary {
   opacity: 0.6;
   font-style: italic;
 }
+
+.recipe-actions {
+  margin-bottom: 20px;
+}
+
+.deduct-panel {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 24px;
+}
+
+.deduct-panel h3 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-h);
+  margin: 0 0 10px;
+}
+
+.deduct-panel table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.deduct-panel th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  opacity: 0.6;
+  padding: 0 8px 4px 0;
+}
+
+.deduct-panel td {
+  padding: 4px 8px 4px 0;
+  vertical-align: middle;
+}
+
+.deduct-panel select {
+  font: inherit;
+  font-size: 13px;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-h);
+  max-width: 220px;
+}
+
+.deduct-panel td.num {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.deduct-panel td.num.short {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.deduct-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}

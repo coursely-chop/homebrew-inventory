@@ -38,6 +38,11 @@ export interface HopAddition {
 export interface YeastAddition {
   name: string;
   form: string;
+  /** Packet count when amountIsWeight is false (the common case for dry
+   * yeast, which is how inventory tracks it) — otherwise a weight this app
+   * doesn't yet convert, so deduction skips it rather than guessing. */
+  amount: number;
+  amountIsWeight: boolean;
   displayAmount: string;
   attenuation: number;
 }

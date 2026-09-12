@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import type { IngredientCategory, InventoryItem } from "../types";
 import { CATEGORY_LABELS, CATEGORY_ORDER } from "../lib/inventory";
+import { round } from "../lib/format";
 
 export interface ItemFormValues {
   category: IngredientCategory;
@@ -20,7 +21,7 @@ interface ItemFormProps {
 export function ItemForm({ initial, defaultCategory, onSubmit, onCancel }: ItemFormProps) {
   const [category, setCategory] = useState<IngredientCategory>(initial?.category ?? defaultCategory ?? "hops");
   const [name, setName] = useState(initial?.name ?? "");
-  const [amount, setAmount] = useState(initial ? String(initial.amount) : "");
+  const [amount, setAmount] = useState(initial ? String(round(initial.amount, 2)) : "");
   const [unit, setUnit] = useState(initial?.unit ?? (defaultCategory === "yeast" ? "packet" : "oz"));
   const [notes, setNotes] = useState(initial?.notes ?? "");
 
