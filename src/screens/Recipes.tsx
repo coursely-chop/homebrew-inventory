@@ -3,7 +3,15 @@ import { useRecipes } from "../lib/RecipeContext";
 import { useInventory } from "../lib/InventoryContext";
 import { ImportRecipe } from "../components/ImportRecipe";
 import { RecipeDetail } from "../components/RecipeDetail";
-import { checkFeasibility } from "../lib/recipeIngredients";
+import { checkFeasibility, type ShortIngredient } from "../lib/recipeIngredients";
+import { round } from "../lib/format";
+
+function shortLabel(s: ShortIngredient): string {
+  if (!s.substitute) return s.name;
+  const amount = `${round(s.substitute.amountNeeded, 2)} ${s.substitute.item.unit}`;
+  const aaNote = s.substitute.status === "aa-adjusted" ? ", AA-adjusted" : "";
+  return `${s.name} (try ${s.substitute.item.name}, ${amount}${aaNote})`;
+}
 
 export function Recipes() {
   const { recipes, removeRecipe } = useRecipes();
@@ -37,8 +45,13 @@ export function Recipes() {
                     {feasibility.ready ? (
                       <span className="badge ready">ready to brew</span>
                     ) : (
-                      <span className="badge short-badge" title={feasibility.short.map((s) => `${s.name}: have ${s.have} ${s.unit}, need ${s.needed.toFixed(2)} ${s.unit}`).join("; ")}>
-                        short: {feasibility.short.map((s) => s.name).join(", ")}
+                      <span
+                        className="badge short-badge"
+                        title={feasibility.short
+                          .map((s) => `${s.name}: have ${s.have} ${s.unit}, need ${s.needed.toFixed(2)} ${s.unit}`)
+                          .join("; ")}
+                      >
+                        short: {feasibility.short.map(shortLabel).join(", ")}
                       </span>
                     )}
                   </span>

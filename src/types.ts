@@ -7,6 +7,11 @@ export interface InventoryItem {
   amount: number;
   unit: string;
   notes: string;
+  /** Alpha acid %, hops only — from the package at purchase. Lets boil-hop
+   * substitution scale weight to preserve bitterness instead of a 1:1 gram
+   * swap. Undefined until entered; substitution math falls back to an
+   * unadjusted amount wherever it's missing. */
+  alphaAcid?: number;
   /** ISO date this item was added under real freshness tracking, or null for
    * baseline stock imported at launch with unknown purchase date (see PRD:
    * no backfilling historical purchase dates). */

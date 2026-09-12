@@ -9,6 +9,7 @@ export interface ItemFormValues {
   amount: number;
   unit: string;
   notes: string;
+  alphaAcid?: number;
 }
 
 interface ItemFormProps {
@@ -24,12 +25,21 @@ export function ItemForm({ initial, defaultCategory, onSubmit, onCancel }: ItemF
   const [amount, setAmount] = useState(initial ? String(round(initial.amount, 2)) : "");
   const [unit, setUnit] = useState(initial?.unit ?? (defaultCategory === "yeast" ? "packet" : "oz"));
   const [notes, setNotes] = useState(initial?.notes ?? "");
+  const [alphaAcid, setAlphaAcid] = useState(initial?.alphaAcid !== undefined ? String(initial.alphaAcid) : "");
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const parsedAmount = parseFloat(amount);
     if (!name.trim() || Number.isNaN(parsedAmount)) return;
-    onSubmit({ category, name: name.trim(), amount: parsedAmount, unit: unit.trim(), notes: notes.trim() });
+    const parsedAA = parseFloat(alphaAcid);
+    onSubmit({
+      category,
+      name: name.trim(),
+      amount: parsedAmount,
+      unit: unit.trim(),
+      notes: notes.trim(),
+      alphaAcid: category === "hops" && !Number.isNaN(parsedAA) ? parsedAA : undefined,
+    });
   }
 
   return (
@@ -54,6 +64,15 @@ export function ItemForm({ initial, defaultCategory, onSubmit, onCancel }: ItemF
         />
         <input type="text" placeholder="Unit (oz, lb, packet)" value={unit} onChange={(e) => setUnit(e.target.value)} />
       </div>
+      {category === "hops" && (
+        <input
+          type="number"
+          step="any"
+          placeholder="Alpha acid % (from the package)"
+          value={alphaAcid}
+          onChange={(e) => setAlphaAcid(e.target.value)}
+        />
+      )}
       <input type="text" placeholder="Notes (optional)" value={notes} onChange={(e) => setNotes(e.target.value)} />
       <div className="item-form-actions">
         <button type="button" className="secondary" onClick={onCancel}>

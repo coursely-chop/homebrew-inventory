@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useInventory } from "../lib/InventoryContext";
-import { buildIngredientRows, totalsByItem, type IngredientRow } from "../lib/recipeIngredients";
+import { buildIngredientRows, effectiveAmount, effectiveTotalsByItem, type IngredientRow } from "../lib/recipeIngredients";
 import { round } from "../lib/format";
 import type { Recipe } from "../types";
 
@@ -13,7 +13,7 @@ export function DeductPanel({ recipe, onClose }: { recipe: Recipe; onClose: () =
     setRows((prev) => prev.map((r) => (r.key === key ? { ...r, matchedItemId: itemId || null } : r)));
   }
 
-  const totals = totalsByItem(rows);
+  const totals = effectiveTotalsByItem(rows, items);
 
   function handleConfirm() {
     for (const [itemId, amountNeeded] of totals) {
@@ -50,6 +50,8 @@ export function DeductPanel({ recipe, onClose }: { recipe: Recipe; onClose: () =
         <tbody>
           {rows.map((row) => {
             const matched = items.find((i) => i.id === row.matchedItemId) ?? null;
+            const rowEffective = effectiveAmount(row, items);
+            const aaAdjusted = row.category === "hops" && row.use === "Boil" && Math.abs(rowEffective - row.amountNeeded) > 0.005;
             const totalNeeded = row.matchedItemId ? totals.get(row.matchedItemId)! : null;
             const after = matched && totalNeeded !== null ? matched.amount - totalNeeded : null;
             const short = after !== null && after < 0;
@@ -58,6 +60,11 @@ export function DeductPanel({ recipe, onClose }: { recipe: Recipe; onClose: () =
                 <td>{row.ingredientName}</td>
                 <td className="num">
                   {round(row.amountNeeded, 2)} {row.unit}
+                  {aaAdjusted && (
+                    <div className="aa-note">
+                      ≈{round(rowEffective, 2)} {row.unit} of {matched?.name} (AA-adjusted)
+                    </div>
+                  )}
                 </td>
                 <td>
                   <select value={row.matchedItemId ?? ""} onChange={(e) => setMatch(row.key, e.target.value)}>

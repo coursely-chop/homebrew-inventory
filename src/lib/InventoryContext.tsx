@@ -9,6 +9,7 @@ export interface NewItemInput {
   amount: number;
   unit: string;
   notes: string;
+  alphaAcid?: number;
 }
 
 interface InventoryContextValue {
@@ -35,6 +36,7 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
       amount: input.amount,
       unit: input.unit,
       notes: input.notes,
+      alphaAcid: input.alphaAcid,
       // A newly logged purchase, not baseline stock — gets real freshness tracking.
       purchaseDate: new Date().toISOString(),
     };

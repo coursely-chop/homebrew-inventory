@@ -1,6 +1,6 @@
 import type { IngredientCategory, InventoryItem } from "../types";
 
-function normalizeCompact(name: string): string {
+export function normalizeCompact(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 

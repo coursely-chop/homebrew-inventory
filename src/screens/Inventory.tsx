@@ -62,6 +62,9 @@ export function Inventory() {
                         <span className="item-amount">
                           {round(item.amount, 2)} {item.unit}
                         </span>
+                        {item.category === "hops" && item.alphaAcid !== undefined && (
+                          <span className="item-aa">{item.alphaAcid}% AA</span>
+                        )}
                         {isLowStock(item) && <span className="badge low">low</span>}
                       </div>
                       <div className="item-meta">
