@@ -16,3 +16,73 @@ export interface InventoryItem {
 export interface InventoryData {
   items: InventoryItem[];
 }
+
+export interface Fermentable {
+  name: string;
+  type: string;
+  amountLb: number;
+  yieldPct: number;
+  colorLovibond: number;
+}
+
+export interface HopAddition {
+  name: string;
+  alpha: number;
+  amountOz: number;
+  use: string;
+  time: number;
+  form: string;
+  temperatureF: number | null;
+}
+
+export interface YeastAddition {
+  name: string;
+  form: string;
+  displayAmount: string;
+  attenuation: number;
+}
+
+export interface MiscAddition {
+  name: string;
+  displayAmount: string;
+  time: number;
+  type: string;
+  use: string;
+}
+
+export interface MashStep {
+  name: string;
+  type: string;
+  stepTimeMin: number;
+  stepTempF: number;
+  rampTimeMin: number;
+  endTempF: number;
+}
+
+export interface Recipe {
+  id: string;
+  name: string;
+  styleName: string;
+  batchSizeGal: number;
+  boilTimeMin: number;
+  efficiencyPct: number;
+  estOG: number;
+  estFG: number;
+  ibu: number;
+  estABV: number;
+  estColorSRM: number;
+  fermentables: Fermentable[];
+  hops: HopAddition[];
+  yeasts: YeastAddition[];
+  miscs: MiscAddition[];
+  mashSteps: MashStep[];
+  fermentationStages: number;
+  primaryAgeDays: number;
+  primaryTempF: number;
+  notes: string;
+  /** Grainfather has no public API — BeerXML export/import, done manually per
+   * recipe, is the realistic path (see PRD). Kept so the recipe list can show
+   * where each entry came from once manual entry exists alongside import. */
+  sourceFile: string;
+  importedAt: string;
+}
