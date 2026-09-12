@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<RECIPES>
+  <RECIPE>
+    <NAME>Substantial - 02 - Hop Sub</NAME>
+    <VERSION>1</VERSION>
+    <DATE>12 Sep 26</DATE>
+    <TYPE>All Grain</TYPE>
+    <BREWER>Ben Messinger</BREWER>
+    <BATCH_SIZE>24.605</BATCH_SIZE>
+    <BOIL_SIZE>0</BOIL_SIZE>
+    <BOIL_TIME>60</BOIL_TIME>
+    <EFFICIENCY>78</EFFICIENCY>
+    <EST_OG>1.057</EST_OG>
+    <EST_FG>1.011</EST_FG>
+    <IBU>75.3</IBU>
+    <EST_ABV>6.1</EST_ABV>
+    <CALORIES>191</CALORIES>
+    <EST_COLOR>6.9152325081947</EST_COLOR>
+    <NOTES/>
+    <IBU_METHOD>Tinseth</IBU_METHOD>
+    <STYLE>
+      <NAME>Specialty IPA</NAME>
+      <VERSION>1</VERSION>
+      <CATEGORY_NUMBER>21</CATEGORY_NUMBER>
+      <STYLE_LETTER>B</STYLE_LETTER>
+      <STYLE_GUIDE>BJCP</STYLE_GUIDE>
+      <TYPE>Ale</TYPE>
+      <OG_MIN>0.995</OG_MIN>
+      <OG_MAX>1.12</OG_MAX>
+      <FG_MIN>0.995</FG_MIN>
+      <FG_MAX>1.12</FG_MAX>
+      <IBU_MIN>0</IBU_MIN>
+      <IBU_MAX>120</IBU_MAX>
+      <COLOR_MIN>0</COLOR_MIN>
+      <COLOR_MAX>40</COLOR_MAX>
+    </STYLE>
+    <WATERS/>
+    <FERMENTABLES>
+      <FERMENTABLE>
+        <NAME>Pale Malt (2-Row)</NAME>
+        <VERSION>1</VERSION>
+        <TYPE>Grain</TYPE>
+        <AMOUNT>5.216</AMOUNT>
+        <YIELD>78.385337776431</YIELD>
+        <COLOR>3.52</COLOR>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Oats, Flaked</NAME>
+        <VERSION>1</VERSION>
+        <TYPE>Grain</TYPE>
+        <AMOUNT>0.68</AMOUNT>
+        <YIELD>79.629549487168</YIELD>
+        <COLOR>1.2998375904326</COLOR>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>White Wheat Malt</NAME>
+        <VERSION>1</VERSION>
+        <TYPE>Grain</TYPE>
+        <AMOUNT>0.34</AMOUNT>
+        <YIELD>83.524473103389</YIELD>
+        <COLOR>3.5</COLOR>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Crystal - 40L (2-Row)</NAME>
+        <VERSION>1</VERSION>
+        <TYPE>Grain</TYPE>
+        <AMOUNT>0.227</AMOUNT>
+        <YIELD>69.675855801272</YIELD>
+        <COLOR>39.937989074265</COLOR>
+      </FERMENTABLE>
+    </FERMENTABLES>
+    <HOPS>
+      <HOP>
+        <NAME>Warrior</NAME>
+        <VERSION>1</VERSION>
+        <ALPHA>16</ALPHA>
+        <AMOUNT>0.021</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>60</TIME>
+        <FORM>Pellet</FORM>
+      </HOP>
+      <HOP>
+        <NAME>Simcoe</NAME>
+        <VERSION>1</VERSION>
+        <ALPHA>13</ALPHA>
+        <AMOUNT>0.028</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>20</TIME>
+        <FORM>Pellet</FORM>
+      </HOP>
+      <HOP>
+        <NAME>Chinook</NAME>
+        <VERSION>1</VERSION>
+        <ALPHA>13</ALPHA>
+        <AMOUNT>0.028</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>10</TIME>
+        <FORM>Pellet</FORM>
+      </HOP>
+      <HOP>
+        <NAME>Cascade</NAME>
+        <VERSION>1</VERSION>
+        <ALPHA>5.8</ALPHA>
+        <AMOUNT>0.028</AMOUNT>
+        <USE>Hop Stand</USE>
+        <TIME>40</TIME>
+        <FORM>Pellet</FORM>
+        <TEMPERATURE>185</TEMPERATURE>
+        <HOP_TEMP>185</HOP_TEMP>
+      </HOP>
+      <HOP>
+        <NAME>Simcoe</NAME>
+        <VERSION>1</VERSION>
+        <ALPHA>13</ALPHA>
+        <AMOUNT>0.043</AMOUNT>
+        <USE>Hop Stand</USE>
+        <TIME>40</TIME>
+        <FORM>Pellet</FORM>
+        <TEMPERATURE>185</TEMPERATURE>
+        <HOP_TEMP>185</HOP_TEMP>
+      </HOP>
+      <HOP>
+        <NAME>Idaho #7</NAME>
+        <VERSION>1</VERSION>
+        <ALPHA>13</ALPHA>
+        <AMOUNT>0.014</AMOUNT>
+        <USE>Hop Stand</USE>
+        <TIME>40</TIME>
+        <FORM>Pellet</FORM>
+        <TEMPERATURE>185</TEMPERATURE>
+        <HOP_TEMP>185</HOP_TEMP>
+      </HOP>
+      <HOP>
+        <NAME>Citra</NAME>
+        <VERSION>1</VERSION>
+        <ALPHA>12</ALPHA>
+        <AMOUNT>0.028</AMOUNT>
+        <USE>Hop Stand</USE>
+        <TIME>20</TIME>
+        <FORM>Pellet</FORM>
+        <TEMPERATURE>165</TEMPERATURE>
+        <HOP_TEMP>165</HOP_TEMP>
+      </HOP>
+      <HOP>
+        <NAME>Simcoe</NAME>
+        <VERSION>1</VERSION>
+        <ALPHA>13</ALPHA>
+        <AMOUNT>0.028</AMOUNT>
+        <USE>Dry Hop</USE>
+        <TIME>10080</TIME>
+        <FORM>Pellet</FORM>
+      </HOP>
+      <HOP>
+        <NAME>Citra</NAME>
+        <VERSION>1</VERSION>
+        <ALPHA>12</ALPHA>
+        <AMOUNT>0.028</AMOUNT>
+        <USE>Dry Hop</USE>
+        <TIME>10080</TIME>
+        <FORM>Pellet</FORM>
+      </HOP>
+      <HOP>
+        <NAME>Idaho #7</NAME>
+        <VERSION>1</VERSION>
+        <ALPHA>13</ALPHA>
+        <AMOUNT>0.043</AMOUNT>
+        <USE>Dry Hop</USE>
+        <TIME>4320</TIME>
+        <FORM>Pellet</FORM>
+      </HOP>
+      <HOP>
+        <NAME>Mosaic</NAME>
+        <VERSION>1</VERSION>
+        <ALPHA>12.3</ALPHA>
+        <AMOUNT>0.014</AMOUNT>
+        <USE>Dry Hop</USE>
+        <TIME>4320</TIME>
+        <FORM>Pellet</FORM>
+      </HOP>
+    </HOPS>
+    <YEASTS>
+      <YEAST>
+        <NAME>Verdant IPA</NAME>
+        <VERSION>1</VERSION>
+        <TYPE/>
+        <FORM>Dry</FORM>
+        <AMOUNT>1</AMOUNT>
+        <AMOUNT_IS_WEIGHT>false</AMOUNT_IS_WEIGHT>
+        <DISPLAY_AMOUNT>1 pkg</DISPLAY_AMOUNT>
+        <ATTENUATION>79</ATTENUATION>
+        <LABORATORY/>
+        <PRODUCT_ID/>
+      </YEAST>
+    </YEASTS>
+    <MISCS>
+      <MISC>
+        <NAME>Irish Moss</NAME>
+        <VERSION>1</VERSION>
+        <AMOUNT>0.00246446</AMOUNT>
+        <DISPLAY_AMOUNT>0.5 tsp</DISPLAY_AMOUNT>
+        <AMOUNT_IS_WEIGHT>false</AMOUNT_IS_WEIGHT>
+        <TIME>0</TIME>
+        <TYPE>Other</TYPE>
+        <USE>Mash</USE>
+      </MISC>
+      <MISC>
+        <NAME>Calcium Chloride</NAME>
+        <VERSION>1</VERSION>
+        <AMOUNT>0.005102908657935</AMOUNT>
+        <DISPLAY_AMOUNT>0.18 oz</DISPLAY_AMOUNT>
+        <AMOUNT_IS_WEIGHT>true</AMOUNT_IS_WEIGHT>
+        <TIME>0</TIME>
+        <TYPE>Other</TYPE>
+        <USE>Mash</USE>
+      </MISC>
+      <MISC>
+        <NAME>Calcium Sulphate (Gypsum)</NAME>
+        <VERSION>1</VERSION>
+        <AMOUNT>0.0039689289561717</AMOUNT>
+        <DISPLAY_AMOUNT>0.14 oz</DISPLAY_AMOUNT>
+        <AMOUNT_IS_WEIGHT>true</AMOUNT_IS_WEIGHT>
+        <TIME>0</TIME>
+        <TYPE>Other</TYPE>
+        <USE>Mash</USE>
+      </MISC>
+    </MISCS>
+    <MASH>
+      <MASH_STEPS>
+        <MASH_STEP>
+          <NAME>Mash In</NAME>
+          <VERSION>1</VERSION>
+          <TYPE>Temperature</TYPE>
+          <STEP_TIME>60</STEP_TIME>
+          <STEP_TEMP>66.67</STEP_TEMP>
+          <RAMP_TIME>0</RAMP_TIME>
+          <END_TEMP>66.67</END_TEMP>
+        </MASH_STEP>
+        <MASH_STEP>
+          <NAME>Mash Out</NAME>
+          <VERSION>1</VERSION>
+          <TYPE>Temperature</TYPE>
+          <STEP_TIME>10</STEP_TIME>
+          <STEP_TEMP>75</STEP_TEMP>
+          <RAMP_TIME>0</RAMP_TIME>
+          <END_TEMP>75</END_TEMP>
+        </MASH_STEP>
+      </MASH_STEPS>
+    </MASH>
+    <FERMENTATION_STAGES>1</FERMENTATION_STAGES>
+    <PRIMARY_AGE>10</PRIMARY_AGE>
+    <PRIMARY_TEMP>18.33</PRIMARY_TEMP>
+  </RECIPE>
+</RECIPES>

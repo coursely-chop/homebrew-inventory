@@ -1,6 +1,7 @@
 import substantialXml from "../data/recipes/substantial-02.xml?raw";
 import hangerXml from "../data/recipes/hanger.xml?raw";
 import nzPilsXml from "../data/recipes/nz-pils.xml?raw";
+import substantialHopSubXml from "../data/recipes/substantial-02-hop-sub.xml?raw";
 import { parseBeerXML } from "./beerxml";
 import type { Recipe } from "../types";
 
@@ -14,6 +15,7 @@ const SEED_RECIPES: { xml: string; sourceFile: string }[] = [
   { xml: substantialXml, sourceFile: "substantial-02.xml" },
   { xml: hangerXml, sourceFile: "hanger.xml" },
   { xml: nzPilsXml, sourceFile: "nz-pils.xml" },
+  { xml: substantialHopSubXml, sourceFile: "substantial-02-hop-sub.xml" },
 ];
 
 function buildSeedRecipes(): Recipe[] {
