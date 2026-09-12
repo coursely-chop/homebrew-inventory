@@ -1,6 +1,6 @@
 {
   "items": [
-    { "id": "hops-citra", "category": "hops", "name": "Citra", "amount": 19.1, "unit": "oz", "notes": "", "alphaAcid": 12, "purchaseDate": null },
+    { "id": "hops-citra", "category": "hops", "name": "Citra", "amount": 19.1, "unit": "oz", "notes": "", "alphaAcid": 13.7, "purchaseDate": null },
     { "id": "hops-mosaic", "category": "hops", "name": "Mosaic", "amount": 16, "unit": "oz", "notes": "", "alphaAcid": 12, "purchaseDate": null },
     { "id": "hops-huell-melon", "category": "hops", "name": "Huell Melon", "amount": 13.5, "unit": "oz", "notes": "", "alphaAcid": 6.3, "purchaseDate": null },
     { "id": "hops-warrior", "category": "hops", "name": "Warrior", "amount": 9.4, "unit": "oz", "notes": "", "alphaAcid": 15.4, "purchaseDate": null },
@@ -14,7 +14,7 @@
     { "id": "hops-hallertau", "category": "hops", "name": "Hallertau", "amount": 1, "unit": "oz", "notes": "", "alphaAcid": 4, "purchaseDate": null },
     { "id": "hops-cascade", "category": "hops", "name": "Cascade", "amount": 1, "unit": "oz", "notes": "", "alphaAcid": 6.1, "purchaseDate": null },
     { "id": "hops-vic-secret", "category": "hops", "name": "Vic Secret", "amount": 0.7, "unit": "oz", "notes": "", "alphaAcid": 15.5, "purchaseDate": null },
-    { "id": "hops-centennial", "category": "hops", "name": "Centennial", "amount": 0.61, "unit": "oz", "notes": "", "alphaAcid": 10.5, "purchaseDate": null },
+    { "id": "hops-centennial", "category": "hops", "name": "Centennial", "amount": 0.61, "unit": "oz", "notes": "", "purchaseDate": null },
     { "id": "grain-us-2-row", "category": "grain", "name": "US 2-Row", "amount": 37, "unit": "lb", "notes": "", "purchaseDate": null },
     { "id": "grain-flaked-oats", "category": "grain", "name": "Flaked Oats", "amount": 12, "unit": "lb", "notes": "approximate", "purchaseDate": null },
     { "id": "grain-carapils", "category": "grain", "name": "Carapils", "amount": 7, "unit": "lb", "notes": "", "purchaseDate": null },
