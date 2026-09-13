@@ -41,6 +41,12 @@ export interface DeductionLogEntry {
   /** Set when undone — kept in the log rather than deleted, so the record
    * of "this happened, then was reversed" survives. */
   undoneAt: string | null;
+  /** False for an entry backfilled via "Log a past brew" — recorded purely
+   * as history, without touching current stock (e.g. because it already
+   * happened, or was already accounted for another way). Undo only makes
+   * sense when this is true; otherwise "restoring" would add stock back
+   * that this entry never actually removed. */
+  appliedToInventory: boolean;
 }
 
 export interface Fermentable {

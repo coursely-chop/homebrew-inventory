@@ -3,7 +3,7 @@ import { addItem, deleteItem, loadData, saveItem, saveItems } from "./storage";
 import { addDeductionLogEntry, loadDeductionLog, markDeductionUndone } from "./deductionLog";
 import { pushLocalToCloud } from "./cloudSync";
 import { slugify } from "./slug";
-import type { DeductionLogEntry, InventoryData, InventoryItem } from "../types";
+import type { DeductionLineItem, DeductionLogEntry, InventoryData, InventoryItem } from "../types";
 
 export interface NewItemInput {
   category: InventoryItem["category"];
@@ -31,8 +31,16 @@ interface InventoryContextValue {
    * subtracted, not what was asked for, so undo can restore exactly that
    * much without fabricating stock that was never really there. */
   deductBatch: (recipeId: string, recipeName: string, deltas: DeductionRequest[]) => void;
-  /** Reverses a not-yet-undone log entry, adding its recorded amounts back
-   * to current stock, and marks the entry undone (kept, not deleted). */
+  /** Records a history entry WITHOUT touching current stock — for a brew
+   * that already happened and whose consumption is already reflected in
+   * inventory some other way (e.g. backfilling from before this feature
+   * existed). Amounts are exactly what's passed in, not clamped, since
+   * there's no live stock check to clamp against. */
+  logPastDeduction: (recipeId: string, recipeName: string, deductedAt: string, items: DeductionLineItem[]) => void;
+  /** Reverses a not-yet-undone, inventory-applying log entry, adding its
+   * recorded amounts back to current stock, and marks the entry undone
+   * (kept, not deleted). No-ops for a log-only entry (appliedToInventory:
+   * false) — there's nothing to add back. */
   undoDeduction: (logId: string) => void;
   /** Re-reads localStorage into state — used by the cloud-sync
    * reconciliation when the cloud copy wins on load. */
@@ -93,6 +101,21 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
       deductedAt: new Date().toISOString(),
       items: lineItems,
       undoneAt: null,
+      appliedToInventory: true,
+    };
+    setDeductionLog(addDeductionLogEntry(entry));
+    pushLocalToCloud();
+  }
+
+  function logPastDeduction(recipeId: string, recipeName: string, deductedAt: string, items: DeductionLineItem[]) {
+    const entry: DeductionLogEntry = {
+      id: crypto.randomUUID(),
+      recipeId,
+      recipeName,
+      deductedAt,
+      items,
+      undoneAt: null,
+      appliedToInventory: false,
     };
     setDeductionLog(addDeductionLogEntry(entry));
     pushLocalToCloud();
@@ -100,7 +123,7 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
 
   function undoDeduction(logId: string) {
     const entry = deductionLog.find((e) => e.id === logId);
-    if (!entry || entry.undoneAt) return;
+    if (!entry || entry.undoneAt || !entry.appliedToInventory) return;
     const updatedItems = data.items.map((item) => {
       const line = entry.items.find((l) => l.itemId === item.id);
       return line ? { ...item, amount: item.amount + line.amount } : item;
@@ -117,7 +140,17 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
 
   return (
     <InventoryContext.Provider
-      value={{ items: data.items, deductionLog, createItem, updateItem, removeItem, deductBatch, undoDeduction, reload }}
+      value={{
+        items: data.items,
+        deductionLog,
+        createItem,
+        updateItem,
+        removeItem,
+        deductBatch,
+        logPastDeduction,
+        undoDeduction,
+        reload,
+      }}
     >
       {children}
     </InventoryContext.Provider>

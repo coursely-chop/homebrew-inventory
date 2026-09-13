@@ -1,6 +1,7 @@
 import { useState, type FocusEvent } from "react";
 import { useInventory } from "../lib/InventoryContext";
 import { ItemForm, type ItemFormValues } from "../components/ItemForm";
+import { LogPastBrew } from "../components/LogPastBrew";
 import { CATEGORY_LABELS, CATEGORY_ORDER, daysSincePurchase, isLowStock, isOutOfStock } from "../lib/inventory";
 import { round } from "../lib/format";
 import type { DeductionLogEntry, IngredientCategory, InventoryItem } from "../types";
@@ -176,35 +177,41 @@ export function Inventory() {
 }
 
 function DeductionHistory({ log, onUndo }: { log: DeductionLogEntry[]; onUndo: (id: string) => void }) {
-  if (log.length === 0) {
-    return <p className="empty">No deductions logged yet — brewing something will show up here.</p>;
-  }
-
   return (
-    <ul className="deduction-history">
-      {log.map((entry) => (
-        <li key={entry.id} className={`history-entry${entry.undoneAt ? " undone" : ""}`}>
-          <div className="history-entry-header">
-            <span className="history-recipe-name">{entry.recipeName}</span>
-            <span className="history-date">{formatHistoryDate(entry.deductedAt)}</span>
-          </div>
-          <ul className="history-items">
-            {entry.items.map((line) => (
-              <li key={line.itemId}>
-                {line.name}: {round(line.amount, 2)} {line.unit}
-              </li>
-            ))}
-          </ul>
-          {entry.undoneAt ? (
-            <p className="history-undone-note">Undone {formatHistoryDate(entry.undoneAt)}</p>
-          ) : (
-            <button type="button" className="secondary" onClick={() => onUndo(entry.id)}>
-              Undo — restore to inventory
-            </button>
-          )}
-        </li>
-      ))}
-    </ul>
+    <>
+      <LogPastBrew />
+
+      {log.length === 0 ? (
+        <p className="empty">No deductions logged yet — brewing something will show up here.</p>
+      ) : (
+        <ul className="deduction-history">
+          {log.map((entry) => (
+            <li key={entry.id} className={`history-entry${entry.undoneAt ? " undone" : ""}`}>
+              <div className="history-entry-header">
+                <span className="history-recipe-name">{entry.recipeName}</span>
+                <span className="history-date">{formatHistoryDate(entry.deductedAt)}</span>
+              </div>
+              <ul className="history-items">
+                {entry.items.map((line) => (
+                  <li key={line.itemId}>
+                    {line.name}: {round(line.amount, 2)} {line.unit}
+                  </li>
+                ))}
+              </ul>
+              {entry.undoneAt ? (
+                <p className="history-undone-note">Undone {formatHistoryDate(entry.undoneAt)}</p>
+              ) : entry.appliedToInventory ? (
+                <button type="button" className="secondary" onClick={() => onUndo(entry.id)}>
+                  Undo — restore to inventory
+                </button>
+              ) : (
+                <p className="history-undone-note">Logged only — doesn't affect current inventory</p>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
   );
 }
 
