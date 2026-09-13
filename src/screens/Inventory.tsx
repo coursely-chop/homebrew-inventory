@@ -61,7 +61,12 @@ export function Inventory() {
 
       {CATEGORY_ORDER.filter((category) => category !== "misc" || items.some((i) => i.category === "misc")).map(
         (category) => {
-          const categoryItems = tabbedItems.filter((i) => i.category === category).sort((a, b) => a.amount - b.amount);
+          // All: alphabetical — the Low/Out tabs already do the job of
+          // surfacing what needs attention, so All doesn't need to double
+          // as a priority list. Low/Out: amount ascending, most urgent first.
+          const categoryItems = tabbedItems
+            .filter((i) => i.category === category)
+            .sort((a, b) => (tab === "all" ? a.name.localeCompare(b.name) : a.amount - b.amount));
 
           if (tab !== "all" && categoryItems.length === 0) return null;
 
