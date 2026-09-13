@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FocusEvent } from "react";
 import { useInventory } from "../lib/InventoryContext";
 import { ItemForm, type ItemFormValues } from "../components/ItemForm";
 import { CATEGORY_LABELS, CATEGORY_ORDER, daysSincePurchase, isLowStock, isOutOfStock, outOfStockLabel } from "../lib/inventory";
@@ -30,6 +30,7 @@ export function Inventory() {
   const [tab, setTab] = useState<ViewTab>("all");
   const [addingCategory, setAddingCategory] = useState<IngredientCategory | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   function handleCreate(values: ItemFormValues) {
     createItem(values);
@@ -101,9 +102,10 @@ export function Inventory() {
                       />
                     </li>
                   ) : (
-                    <li key={item.id} className={`item-row${isLowStock(item) ? " low-stock" : ""}`}>
-                      <div className="item-main">
-                        <span className="item-name">{item.name}</span>
+                    <li key={item.id} className="item-row">
+                      <span className="item-name">{item.name}</span>
+
+                      <span className="item-amount-col">
                         <span className="item-amount">
                           {round(item.amount, 2)} {item.unit}
                         </span>
@@ -115,19 +117,26 @@ export function Inventory() {
                         ) : (
                           isLowStock(item) && <span className="badge low">low</span>
                         )}
-                      </div>
-                      <div className="item-meta">
+                      </span>
+
+                      <span className="item-meta">
                         {item.notes && <span className="item-notes">{item.notes}</span>}
                         <FreshnessLabel item={item} />
-                      </div>
-                      <div className="item-actions">
-                        <button type="button" className="link" onClick={() => setEditingId(item.id)}>
-                          Edit
-                        </button>
-                        <button type="button" className="link danger" onClick={() => removeItem(item.id)}>
-                          Delete
-                        </button>
-                      </div>
+                      </span>
+
+                      <RowMenu
+                        open={openMenuId === item.id}
+                        onToggle={() => setOpenMenuId(openMenuId === item.id ? null : item.id)}
+                        onClose={() => setOpenMenuId(null)}
+                        onEdit={() => {
+                          setEditingId(item.id);
+                          setOpenMenuId(null);
+                        }}
+                        onDelete={() => {
+                          removeItem(item.id);
+                          setOpenMenuId(null);
+                        }}
+                      />
                     </li>
                   )
                 )}
@@ -145,9 +154,45 @@ export function Inventory() {
   );
 }
 
+function RowMenu({
+  open,
+  onToggle,
+  onClose,
+  onEdit,
+  onDelete,
+}: {
+  open: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
+  function handleBlur(e: FocusEvent<HTMLDivElement>) {
+    if (!e.currentTarget.contains(e.relatedTarget)) onClose();
+  }
+
+  return (
+    <div className="row-menu" onBlur={handleBlur}>
+      <button type="button" className="row-menu-trigger" onClick={onToggle} aria-label="Item actions">
+        ⋯
+      </button>
+      {open && (
+        <div className="row-menu-dropdown">
+          <button type="button" onClick={onEdit}>
+            Edit
+          </button>
+          <button type="button" className="danger" onClick={onDelete}>
+            Delete
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function FreshnessLabel({ item }: { item: InventoryItem }) {
   const days = daysSincePurchase(item);
-  if (days === null) return <span className="item-freshness unknown">unknown age (baseline)</span>;
+  if (days === null) return <span className="item-freshness unknown">baseline</span>;
   if (days === 0) return <span className="item-freshness">added today</span>;
   return <span className="item-freshness">added {days}d ago</span>;
 }
