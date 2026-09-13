@@ -58,3 +58,32 @@ export function updateRecipe(recipe: Recipe): Recipe[] {
   saveRecipes(recipes);
   return recipes;
 }
+
+/** Re-parses the bundled BeerXML files fresh and replaces each of their
+ * recipes in storage — the fix for the recurring "I corrected a parsing bug
+ * but browsers that already loaded recipes before the fix don't see it"
+ * problem (e.g. the hop-weight rounding fix). Only touches bundled recipes,
+ * matched by sourceFile: each one's perennial flag is carried over from
+ * whatever's already stored, and anything imported by hand (not one of the
+ * bundled files) is left completely untouched. Unlike a blanket "reset to
+ * seed," this can't destroy anything the user set locally — recipes are
+ * static reference data, and perennial is the only thing they customize on
+ * one, so preserving it is the whole safety story. This is deliberately
+ * NOT applied to inventory: inventory is a live, constantly-changing
+ * ledger, and blindly replacing it with the seed would silently erase real
+ * consumption tracked since the seed was last edited. */
+export function refreshBundledRecipes(): { recipes: Recipe[]; refreshedCount: number } {
+  const existing = loadRecipes();
+  const bundled = buildSeedRecipes();
+  const bundledSourceFiles = new Set(bundled.map((r) => r.sourceFile));
+
+  const refreshed = bundled.map((fresh) => {
+    const previous = existing.find((r) => r.sourceFile === fresh.sourceFile);
+    return previous ? { ...fresh, perennial: previous.perennial } : fresh;
+  });
+  const untouched = existing.filter((r) => !bundledSourceFiles.has(r.sourceFile));
+
+  const recipes = [...refreshed, ...untouched];
+  saveRecipes(recipes);
+  return { recipes, refreshedCount: refreshed.length };
+}

@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useRecipes } from "../lib/RecipeContext";
 
 export function ImportRecipe() {
-  const { importBeerXML } = useRecipes();
+  const { importBeerXML, refreshBundled } = useRecipes();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [pasteOpen, setPasteOpen] = useState(false);
   const [pasteText, setPasteText] = useState("");
@@ -14,6 +14,11 @@ export function ImportRecipe() {
     } else {
       setStatus({ kind: "ok", message: `Imported ${result.imported} recipe${result.imported === 1 ? "" : "s"}.` });
     }
+  }
+
+  function handleRefresh() {
+    const count = refreshBundled();
+    setStatus({ kind: "ok", message: `Refreshed ${count} built-in recipe${count === 1 ? "" : "s"} from the latest data.` });
   }
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -39,6 +44,14 @@ export function ImportRecipe() {
         </button>
         <button type="button" className="secondary" onClick={() => setPasteOpen((v) => !v)}>
           {pasteOpen ? "Cancel paste" : "Paste XML instead"}
+        </button>
+        <button
+          type="button"
+          className="secondary"
+          onClick={handleRefresh}
+          title="Re-parses the built-in recipes with the latest fixes — keeps your ★ perennial flags, doesn't touch recipes you've imported yourself"
+        >
+          Refresh built-in recipes
         </button>
         <input ref={fileInputRef} type="file" accept=".xml" hidden onChange={handleFileChange} />
       </div>

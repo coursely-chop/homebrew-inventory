@@ -108,10 +108,11 @@ export function Inventory() {
                     </li>
                   ) : (
                     <li key={item.id} className="item-row">
-                      <span className="item-name">{item.name}</span>
-
-                      <span className="item-aa">
-                        {item.category === "hops" && item.alphaAcid !== undefined ? `${item.alphaAcid}% AA` : ""}
+                      <span className="item-name-col">
+                        <span className="item-name">{item.name}</span>
+                        {item.category === "hops" && item.alphaAcid !== undefined && (
+                          <span className="item-aa">{item.alphaAcid}% AA</span>
+                        )}
                       </span>
 
                       <span className="item-amount-col">
