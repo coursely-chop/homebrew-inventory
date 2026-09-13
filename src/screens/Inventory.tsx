@@ -124,7 +124,7 @@ export function Inventory() {
                                 : ""
                           }`}
                         >
-                          {round(item.amount, 0)} {item.unit}
+                          {round(item.amount, 1)} {item.unit}
                         </span>
                       </span>
 
