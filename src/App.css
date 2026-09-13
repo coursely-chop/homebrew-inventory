@@ -383,10 +383,6 @@ button.secondary {
   border-bottom: 1px solid var(--border);
 }
 
-.recipe-row.selected {
-  background: var(--bg-subtle);
-}
-
 .recipe-row-main {
   flex: 1;
   display: flex;
@@ -459,10 +455,73 @@ button.secondary {
   color: var(--text);
 }
 
-.recipe-detail {
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
+/* A row whose ingredient is short in current inventory — subtle, not the
+ * loud full low-stock treatment the inventory list moved away from. */
+.recipe-detail tr.short-row td {
+  background: var(--low-bg);
+}
+
+.recipe-detail tr.short-row td:first-child {
+  border-left: 2px solid var(--danger);
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.recipes {
+  animation: slide-in-left 0.2s ease-out;
+}
+
+.recipe-page {
+  animation: slide-in-right 0.2s ease-out;
+}
+
+.back-link {
+  background: none;
+  border: none;
+  padding: 4px 0;
+  margin-bottom: 12px;
+  color: var(--accent);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.recipe-page-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.recipe-page-title {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.recipe-page-title h1 {
+  font-size: 24px;
+  margin: 0;
 }
 
 .recipe-stats {

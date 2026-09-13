@@ -1,14 +1,21 @@
 import { useState } from "react";
 import type { Recipe } from "../types";
 import { formatMinutes, round } from "../lib/format";
-import { checkFeasibility } from "../lib/recipeIngredients";
+import { buildIngredientRows, checkFeasibility } from "../lib/recipeIngredients";
 import { useInventory } from "../lib/InventoryContext";
 import { DeductPanel } from "./DeductPanel";
 
 export function RecipeDetail({ recipe }: { recipe: Recipe }) {
   const { items } = useInventory();
   const feasibility = checkFeasibility(recipe, items);
+  const shortItemIds = new Set(feasibility.short.map((s) => s.itemId));
+  const rows = buildIngredientRows(recipe, items);
   const [deducting, setDeducting] = useState(false);
+
+  function rowClass(key: string): string {
+    const row = rows.find((r) => r.key === key);
+    return row?.matchedItemId && shortItemIds.has(row.matchedItemId) ? "short-row" : "";
+  }
 
   return (
     <div className="recipe-detail">
@@ -42,7 +49,7 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
         <table>
           <tbody>
             {recipe.fermentables.map((f, i) => (
-              <tr key={i}>
+              <tr key={i} className={rowClass(`f${i}`)}>
                 <td>{f.name}</td>
                 <td className="num">{round(f.amountLb, 2)} lb</td>
                 <td className="dim">{f.type}</td>
@@ -58,7 +65,7 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
         <table>
           <tbody>
             {recipe.hops.map((h, i) => (
-              <tr key={i}>
+              <tr key={i} className={rowClass(`h${i}`)}>
                 <td>{h.name}</td>
                 <td className="num">{round(h.amountOz, 2)} oz</td>
                 <td className="dim">{h.use}</td>
@@ -78,7 +85,7 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
         <table>
           <tbody>
             {recipe.yeasts.map((y, i) => (
-              <tr key={i}>
+              <tr key={i} className={rowClass(`y${i}`)}>
                 <td>{y.name}</td>
                 <td className="num">{y.displayAmount}</td>
                 <td className="dim">{y.form}</td>

@@ -110,6 +110,7 @@ export function effectiveTotalsByItem(rows: IngredientRow[], items: InventoryIte
 }
 
 export interface ShortIngredient {
+  itemId: string;
   name: string;
   needed: number;
   have: number;
@@ -127,7 +128,12 @@ export interface RecipeFeasibility {
 
 export function checkFeasibility(recipe: Recipe, items: InventoryItem[]): RecipeFeasibility {
   const rows = buildIngredientRows(recipe, items);
-  const totals = totalsByItem(rows);
+  // Effective (AA-adjusted) totals, not raw — a Boil hop's real inventory AA
+  // can differ from what the recipe assumed, and comparing against the raw
+  // sum was flagging items as short that the adjusted math actually covers
+  // (see DeductPanel, which already used the adjusted total for the real
+  // deduction — this brings the feasibility check in line with it).
+  const totals = effectiveTotalsByItem(rows, items);
 
   const short: ShortIngredient[] = [];
   for (const [itemId, needed] of totals) {
@@ -148,7 +154,7 @@ export function checkFeasibility(recipe: Recipe, items: InventoryItem[]): Recipe
         undefined;
     }
 
-    short.push({ name: item.name, needed, have: item.amount, unit: item.unit, substitute });
+    short.push({ itemId, name: item.name, needed, have: item.amount, unit: item.unit, substitute });
   }
 
   const unmatched = rows.filter((r) => !r.matchedItemId).map((r) => r.ingredientName);

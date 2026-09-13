@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useRecipes } from "../lib/RecipeContext";
 import { useInventory } from "../lib/InventoryContext";
 import { ImportRecipe } from "../components/ImportRecipe";
-import { RecipeDetail } from "../components/RecipeDetail";
 import { checkFeasibility, type ShortIngredient } from "../lib/recipeIngredients";
 import { round } from "../lib/format";
 
@@ -16,8 +15,7 @@ function shortLabel(s: ShortIngredient): string {
 export function Recipes() {
   const { recipes, removeRecipe, togglePerennial } = useRecipes();
   const { items } = useInventory();
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const selected = recipes.find((r) => r.id === selectedId) ?? null;
+  const navigate = useNavigate();
 
   return (
     <div className="recipes">
@@ -34,7 +32,7 @@ export function Recipes() {
           {recipes.map((r) => {
             const feasibility = checkFeasibility(r, items);
             return (
-              <li key={r.id} className={`recipe-row${selectedId === r.id ? " selected" : ""}`}>
+              <li key={r.id} className="recipe-row">
                 <button
                   type="button"
                   className={`star-toggle${r.perennial ? " active" : ""}`}
@@ -43,11 +41,7 @@ export function Recipes() {
                 >
                   {r.perennial ? "★" : "☆"}
                 </button>
-                <button
-                  type="button"
-                  className="recipe-row-main"
-                  onClick={() => setSelectedId(selectedId === r.id ? null : r.id)}
-                >
+                <button type="button" className="recipe-row-main" onClick={() => navigate(`/recipes/${r.id}`)}>
                   <span className="recipe-name-line">
                     <span className="recipe-name">{r.name}</span>
                     {feasibility.ready ? (
@@ -71,14 +65,7 @@ export function Recipes() {
                     <span className="recipe-unmatched">not tracked: {feasibility.unmatched.join(", ")}</span>
                   )}
                 </button>
-                <button
-                  type="button"
-                  className="link danger"
-                  onClick={() => {
-                    if (selectedId === r.id) setSelectedId(null);
-                    removeRecipe(r.id);
-                  }}
-                >
+                <button type="button" className="link danger" onClick={() => removeRecipe(r.id)}>
                   Delete
                 </button>
               </li>
@@ -86,8 +73,6 @@ export function Recipes() {
           })}
         </ul>
       )}
-
-      {selected && <RecipeDetail recipe={selected} />}
     </div>
   );
 }

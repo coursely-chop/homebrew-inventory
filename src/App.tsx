@@ -4,6 +4,7 @@ import { InventoryProvider } from "./lib/InventoryContext";
 import { RecipeProvider } from "./lib/RecipeContext";
 import { Inventory } from "./screens/Inventory";
 import { Recipes } from "./screens/Recipes";
+import { RecipeDetailPage } from "./screens/RecipeDetailPage";
 import { ShoppingList } from "./screens/ShoppingList";
 
 function Nav() {
@@ -31,6 +32,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Inventory />} />
             <Route path="/recipes" element={<Recipes />} />
+            <Route path="/recipes/:id" element={<RecipeDetailPage />} />
             <Route path="/shopping-list" element={<ShoppingList />} />
           </Routes>
         </BrowserRouter>
