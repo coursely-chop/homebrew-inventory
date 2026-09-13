@@ -5,7 +5,7 @@ import { round } from "../lib/format";
 import type { Recipe } from "../types";
 
 export function DeductPanel({ recipe, onClose }: { recipe: Recipe; onClose: () => void }) {
-  const { items, updateItem } = useInventory();
+  const { items, deductBatch } = useInventory();
   const [rows, setRows] = useState<IngredientRow[]>(() => buildIngredientRows(recipe, items));
   const [done, setDone] = useState(false);
 
@@ -16,11 +16,8 @@ export function DeductPanel({ recipe, onClose }: { recipe: Recipe; onClose: () =
   const totals = effectiveTotalsByItem(rows, items);
 
   function handleConfirm() {
-    for (const [itemId, amountNeeded] of totals) {
-      const item = items.find((i) => i.id === itemId);
-      if (!item) continue;
-      updateItem({ ...item, amount: Math.max(0, item.amount - amountNeeded) });
-    }
+    const deltas = [...totals.entries()].map(([itemId, amountRequested]) => ({ itemId, amountRequested }));
+    deductBatch(recipe.id, recipe.name, deltas);
     setDone(true);
   }
 

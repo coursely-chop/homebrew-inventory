@@ -14,6 +14,7 @@
  */
 import { STORAGE_KEY as INVENTORY_KEY } from "./storage";
 import { STORAGE_KEY as RECIPES_KEY } from "./recipeStorage";
+import { STORAGE_KEY as DEDUCTION_LOG_KEY } from "./deductionLog";
 
 // Set only when deployed with the sync backend configured — undefined in
 // local dev, where there's no server behind /api/data anyway.
@@ -24,6 +25,7 @@ const UPDATED_AT_KEY = "homebrew-updated-at";
 export interface CloudPayload {
   inventory: unknown;
   recipes: unknown;
+  deductionLog: unknown;
 }
 
 function touchUpdatedAt(): void {
@@ -39,9 +41,11 @@ export function getLocalUpdatedAt(): string | null {
 function readCombinedLocal(): CloudPayload {
   const inventory = localStorage.getItem(INVENTORY_KEY);
   const recipes = localStorage.getItem(RECIPES_KEY);
+  const deductionLog = localStorage.getItem(DEDUCTION_LOG_KEY);
   return {
     inventory: inventory ? JSON.parse(inventory) : null,
     recipes: recipes ? JSON.parse(recipes) : null,
+    deductionLog: deductionLog ? JSON.parse(deductionLog) : null,
   };
 }
 
@@ -102,6 +106,9 @@ export function adoptCloudData(payload: CloudPayload): void {
   }
   if (payload.recipes !== null && payload.recipes !== undefined) {
     localStorage.setItem(RECIPES_KEY, JSON.stringify(payload.recipes));
+  }
+  if (payload.deductionLog !== null && payload.deductionLog !== undefined) {
+    localStorage.setItem(DEDUCTION_LOG_KEY, JSON.stringify(payload.deductionLog));
   }
   touchUpdatedAt();
 }

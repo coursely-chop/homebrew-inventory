@@ -39,3 +39,12 @@ export function deleteItem(itemId: string): InventoryData {
   saveData(next);
   return next;
 }
+
+/** Replaces the whole item list in one write — used when several items
+ * change together (a recipe deduction, or its undo) so the batch is one
+ * atomic save instead of one localStorage write per item. */
+export function saveItems(items: InventoryItem[]): InventoryData {
+  const next: InventoryData = { items };
+  saveData(next);
+  return next;
+}

@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
-import { addItem, deleteItem, loadData, saveItem } from "./storage";
+import { addItem, deleteItem, loadData, saveItem, saveItems } from "./storage";
+import { addDeductionLogEntry, loadDeductionLog, markDeductionUndone } from "./deductionLog";
 import { pushLocalToCloud } from "./cloudSync";
 import { slugify } from "./slug";
-import type { InventoryData, InventoryItem } from "../types";
+import type { DeductionLogEntry, InventoryData, InventoryItem } from "../types";
 
 export interface NewItemInput {
   category: InventoryItem["category"];
@@ -13,11 +14,26 @@ export interface NewItemInput {
   alphaAcid?: number;
 }
 
+export interface DeductionRequest {
+  itemId: string;
+  amountRequested: number;
+}
+
 interface InventoryContextValue {
   items: InventoryItem[];
+  deductionLog: DeductionLogEntry[];
   createItem: (input: NewItemInput) => void;
   updateItem: (item: InventoryItem) => void;
   removeItem: (itemId: string) => void;
+  /** Applies several item deductions as one atomic save and records a
+   * recoverable log entry for it. Each requested amount is clamped to what
+   * the item actually has on hand — the log records what was actually
+   * subtracted, not what was asked for, so undo can restore exactly that
+   * much without fabricating stock that was never really there. */
+  deductBatch: (recipeId: string, recipeName: string, deltas: DeductionRequest[]) => void;
+  /** Reverses a not-yet-undone log entry, adding its recorded amounts back
+   * to current stock, and marks the entry undone (kept, not deleted). */
+  undoDeduction: (logId: string) => void;
   /** Re-reads localStorage into state — used by the cloud-sync
    * reconciliation when the cloud copy wins on load. */
   reload: () => void;
@@ -27,6 +43,7 @@ const InventoryContext = createContext<InventoryContextValue | null>(null);
 
 export function InventoryProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<InventoryData>(() => loadData());
+  const [deductionLog, setDeductionLog] = useState<DeductionLogEntry[]>(() => loadDeductionLog());
 
   function createItem(input: NewItemInput) {
     const id = slugify(
@@ -58,12 +75,50 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
     pushLocalToCloud();
   }
 
+  function deductBatch(recipeId: string, recipeName: string, deltas: DeductionRequest[]) {
+    const lineItems: DeductionLogEntry["items"] = [];
+    const updatedItems = data.items.map((item) => {
+      const delta = deltas.find((d) => d.itemId === item.id);
+      if (!delta) return item;
+      const actual = Math.min(delta.amountRequested, item.amount);
+      if (actual > 0) lineItems.push({ itemId: item.id, name: item.name, unit: item.unit, amount: actual });
+      return { ...item, amount: item.amount - actual };
+    });
+    setData(saveItems(updatedItems));
+
+    const entry: DeductionLogEntry = {
+      id: crypto.randomUUID(),
+      recipeId,
+      recipeName,
+      deductedAt: new Date().toISOString(),
+      items: lineItems,
+      undoneAt: null,
+    };
+    setDeductionLog(addDeductionLogEntry(entry));
+    pushLocalToCloud();
+  }
+
+  function undoDeduction(logId: string) {
+    const entry = deductionLog.find((e) => e.id === logId);
+    if (!entry || entry.undoneAt) return;
+    const updatedItems = data.items.map((item) => {
+      const line = entry.items.find((l) => l.itemId === item.id);
+      return line ? { ...item, amount: item.amount + line.amount } : item;
+    });
+    setData(saveItems(updatedItems));
+    setDeductionLog(markDeductionUndone(logId, new Date().toISOString()));
+    pushLocalToCloud();
+  }
+
   function reload() {
     setData(loadData());
+    setDeductionLog(loadDeductionLog());
   }
 
   return (
-    <InventoryContext.Provider value={{ items: data.items, createItem, updateItem, removeItem, reload }}>
+    <InventoryContext.Provider
+      value={{ items: data.items, deductionLog, createItem, updateItem, removeItem, deductBatch, undoDeduction, reload }}
+    >
       {children}
     </InventoryContext.Provider>
   );

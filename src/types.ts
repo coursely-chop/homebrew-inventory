@@ -22,6 +22,27 @@ export interface InventoryData {
   items: InventoryItem[];
 }
 
+export interface DeductionLineItem {
+  itemId: string;
+  name: string;
+  unit: string;
+  /** What was actually subtracted — clamped to what was on hand, so it's
+   * never more than the item actually had (and undo can restore exactly
+   * this much without fabricating stock that was never really there). */
+  amount: number;
+}
+
+export interface DeductionLogEntry {
+  id: string;
+  recipeId: string;
+  recipeName: string;
+  deductedAt: string;
+  items: DeductionLineItem[];
+  /** Set when undone — kept in the log rather than deleted, so the record
+   * of "this happened, then was reversed" survives. */
+  undoneAt: string | null;
+}
+
 export interface Fermentable {
   name: string;
   type: string;
