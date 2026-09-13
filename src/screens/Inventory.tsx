@@ -15,11 +15,14 @@ const TABS: { id: ViewTab; label: string }[] = [
 
 // "Low" and "Out" are mutually exclusive so the two tabs don't just repeat
 // each other — Out is for "can't brew with this at all," Low is "still
-// have some, but reorder before you plan around it."
+// have some, but reorder before you plan around it." All excludes Out too —
+// a kicked hop with dust in the bag doesn't need to clutter the main view
+// now that it has its own tab.
 function matchesTab(item: InventoryItem, tab: ViewTab): boolean {
-  if (tab === "all") return true;
   if (tab === "out") return isOutOfStock(item);
-  return isLowStock(item) && !isOutOfStock(item);
+  if (isOutOfStock(item)) return false;
+  if (tab === "low") return isLowStock(item);
+  return true;
 }
 
 export function Inventory() {
@@ -61,6 +64,7 @@ export function Inventory() {
 
       {CATEGORY_ORDER.filter((category) => category !== "misc" || items.some((i) => i.category === "misc")).map(
         (category) => {
+          const rawCategoryItems = items.filter((i) => i.category === category);
           // All: alphabetical — the Low/Out tabs already do the job of
           // surfacing what needs attention, so All doesn't need to double
           // as a priority list. Low/Out: amount ascending, most urgent first.
@@ -69,6 +73,7 @@ export function Inventory() {
             .sort((a, b) => (tab === "all" ? a.name.localeCompare(b.name) : a.amount - b.amount));
 
           if (tab !== "all" && categoryItems.length === 0) return null;
+          if (tab === "all" && rawCategoryItems.length === 0) return null;
 
           return (
             <section key={category} className="category-section">
@@ -126,7 +131,9 @@ export function Inventory() {
                     </li>
                   )
                 )}
-                {categoryItems.length === 0 && <li className="empty">Nothing tracked yet.</li>}
+                {categoryItems.length === 0 && (
+                  <li className="empty">Everything here is kicked/out — check the Out tab.</li>
+                )}
               </ul>
             </section>
           );

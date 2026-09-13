@@ -1,10 +1,14 @@
-import { HOP_FAMILIES } from "../data/hopFamilies";
+import { HOP_SUBSTITUTES } from "../data/hopSubstitutes";
 import { normalizeCompact } from "./ingredientMatch";
 import type { InventoryItem } from "../types";
 
-export function findHopFamily(hopName: string): string[] | null {
+/** Candidate substitute names for a hop, per the AHA chart-derived map —
+ * case/punctuation-insensitive lookup since recipe names vary ("Idaho #7"
+ * vs "Idaho 7"). */
+export function findSubstituteNames(hopName: string): string[] {
   const target = normalizeCompact(hopName);
-  return HOP_FAMILIES.find((family) => family.some((n) => normalizeCompact(n) === target)) ?? null;
+  const entry = Object.entries(HOP_SUBSTITUTES).find(([name]) => normalizeCompact(name) === target);
+  return entry?.[1] ?? [];
 }
 
 /** A dry-hop/hop-stand swap only needs to be flavor-similar, so the amount
@@ -34,10 +38,10 @@ export interface HopSubstitution {
   status: "aa-adjusted" | "unadjusted";
 }
 
-/** Best substitute for a short hop: same flavor family, actually has enough
- * stock to cover the (AA-adjusted, if applicable) amount needed. Returns
- * null if the hop isn't in any family group or nothing in its family has
- * sufficient stock either. */
+/** Best substitute for a short hop, restricted to the specific pairings in
+ * hopSubstitutes.ts — actually has enough stock to cover the (AA-adjusted,
+ * if applicable) amount needed. Returns null if the hop has no listed
+ * substitute or nothing listed has sufficient stock either. */
 export function suggestHopSubstitute(
   hopName: string,
   use: string,
@@ -45,17 +49,14 @@ export function suggestHopSubstitute(
   recipeAA: number | null,
   items: InventoryItem[]
 ): HopSubstitution | null {
-  const family = findHopFamily(hopName);
-  if (!family) return null;
-  const familyCompact = new Set(family.map(normalizeCompact));
-  const targetCompact = normalizeCompact(hopName);
+  const candidateNames = new Set(findSubstituteNames(hopName).map(normalizeCompact));
+  if (candidateNames.size === 0) return null;
   const isBoil = use === "Boil";
 
   let best: HopSubstitution | null = null;
   for (const item of items) {
     if (item.category !== "hops") continue;
-    const itemCompact = normalizeCompact(item.name);
-    if (itemCompact === targetCompact || !familyCompact.has(itemCompact)) continue;
+    if (!candidateNames.has(normalizeCompact(item.name))) continue;
 
     const { amount, aaAdjusted } = computeEffectiveAmount(isBoil, recipeAA, item.alphaAcid, amountNeeded);
     if (item.amount < amount) continue; // this candidate is also short
