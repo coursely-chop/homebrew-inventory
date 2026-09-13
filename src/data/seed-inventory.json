@@ -28,6 +28,7 @@
     { "id": "grain-honey-malt", "category": "grain", "name": "Honey Malt", "amount": 1, "unit": "lb", "notes": "", "purchaseDate": null },
     { "id": "grain-midnight-wheat", "category": "grain", "name": "Midnight Wheat", "amount": 1, "unit": "lb", "notes": "", "purchaseDate": null },
     { "id": "grain-rye-malt", "category": "grain", "name": "Rye Malt", "amount": 0.5, "unit": "lb", "notes": "", "purchaseDate": null },
+    { "id": "grain-acid-malt", "category": "grain", "name": "Acid Malt", "amount": 2.5, "unit": "lb", "notes": "", "purchaseDate": null },
     { "id": "yeast-verdant-ipa", "category": "yeast", "name": "Verdant IPA", "amount": 7, "unit": "packet", "notes": "Lallemand dry", "purchaseDate": null },
     { "id": "yeast-nova-lager", "category": "yeast", "name": "Nova Lager", "amount": 4, "unit": "packet", "notes": "Lallemand dry; go-to lager strain", "purchaseDate": null },
     { "id": "yeast-munich-classic", "category": "yeast", "name": "Munich Classic", "amount": 1, "unit": "packet", "notes": "Lallemand dry", "purchaseDate": null },
