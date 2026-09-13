@@ -123,6 +123,7 @@ export function parseBeerXML(xmlText: string, sourceFile: string, existingIds: s
       notes: text(r, "NOTES"),
       sourceFile,
       importedAt: new Date().toISOString(),
+      perennial: false,
     };
     return recipe;
   });

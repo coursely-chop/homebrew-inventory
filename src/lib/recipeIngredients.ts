@@ -5,6 +5,11 @@ import type { IngredientCategory, InventoryItem, Recipe } from "../types";
 export interface IngredientRow {
   key: string;
   ingredientName: string;
+  /** The underlying ingredient name without the "(Use)" suffix hop rows add
+   * to ingredientName for display — used to dedupe an unmatched ingredient
+   * across a recipe's several additions of it (e.g. "Motueka (Boil)" and
+   * "Motueka (Hop Stand)" are one ingredient, not two). */
+  rawName: string;
   category: IngredientCategory;
   amountNeeded: number;
   unit: string;
@@ -30,6 +35,7 @@ export function buildIngredientRows(recipe: Recipe, items: InventoryItem[]): Ing
     rows.push({
       key: `f${i}`,
       ingredientName: f.name,
+      rawName: f.name,
       category: "grain",
       amountNeeded: f.amountLb,
       unit: "lb",
@@ -41,6 +47,7 @@ export function buildIngredientRows(recipe: Recipe, items: InventoryItem[]): Ing
     rows.push({
       key: `h${i}`,
       ingredientName: `${h.name} (${h.use})`,
+      rawName: h.name,
       category: "hops",
       amountNeeded: h.amountOz,
       unit: "oz",
@@ -55,6 +62,7 @@ export function buildIngredientRows(recipe: Recipe, items: InventoryItem[]): Ing
     rows.push({
       key: `y${i}`,
       ingredientName: y.name,
+      rawName: y.name,
       category: "yeast",
       amountNeeded: y.amount,
       unit: "packet",

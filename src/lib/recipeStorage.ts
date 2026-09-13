@@ -51,3 +51,10 @@ export function deleteRecipe(id: string): Recipe[] {
   saveRecipes(recipes);
   return recipes;
 }
+
+/** Replaces one recipe in storage (by id) and persists the whole set. */
+export function updateRecipe(recipe: Recipe): Recipe[] {
+  const recipes = loadRecipes().map((r) => (r.id === recipe.id ? recipe : r));
+  saveRecipes(recipes);
+  return recipes;
+}

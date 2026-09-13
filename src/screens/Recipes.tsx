@@ -14,7 +14,7 @@ function shortLabel(s: ShortIngredient): string {
 }
 
 export function Recipes() {
-  const { recipes, removeRecipe } = useRecipes();
+  const { recipes, removeRecipe, togglePerennial } = useRecipes();
   const { items } = useInventory();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = recipes.find((r) => r.id === selectedId) ?? null;
@@ -35,6 +35,14 @@ export function Recipes() {
             const feasibility = checkFeasibility(r, items);
             return (
               <li key={r.id} className={`recipe-row${selectedId === r.id ? " selected" : ""}`}>
+                <button
+                  type="button"
+                  className={`star-toggle${r.perennial ? " active" : ""}`}
+                  title={r.perennial ? "Perennial — part of the standing rotation" : "Mark as perennial"}
+                  onClick={() => togglePerennial(r.id)}
+                >
+                  {r.perennial ? "★" : "☆"}
+                </button>
                 <button
                   type="button"
                   className="recipe-row-main"

@@ -4,6 +4,7 @@ import { InventoryProvider } from "./lib/InventoryContext";
 import { RecipeProvider } from "./lib/RecipeContext";
 import { Inventory } from "./screens/Inventory";
 import { Recipes } from "./screens/Recipes";
+import { ShoppingList } from "./screens/ShoppingList";
 
 function Nav() {
   return (
@@ -13,6 +14,9 @@ function Nav() {
       </NavLink>
       <NavLink to="/recipes" className={({ isActive }) => (isActive ? "active" : "")}>
         Recipes
+      </NavLink>
+      <NavLink to="/shopping-list" className={({ isActive }) => (isActive ? "active" : "")}>
+        Shopping List
       </NavLink>
     </nav>
   );
@@ -27,6 +31,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Inventory />} />
             <Route path="/recipes" element={<Recipes />} />
+            <Route path="/shopping-list" element={<ShoppingList />} />
           </Routes>
         </BrowserRouter>
       </RecipeProvider>

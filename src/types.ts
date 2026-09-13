@@ -95,4 +95,9 @@ export interface Recipe {
    * where each entry came from once manual entry exists alongside import. */
   sourceFile: string;
   importedAt: string;
+  /** A recipe Ben keeps coming back to (his "standing rotation" — see PRD's
+   * Seasonal Rotation section), as opposed to a one-off. Drives the shopping
+   * list: a shortage only becomes a "go buy this" line when it blocks a
+   * perennial recipe, not just any recipe ever imported. */
+  perennial: boolean;
 }

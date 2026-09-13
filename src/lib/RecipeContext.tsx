@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { parseBeerXML } from "./beerxml";
-import { addRecipes, deleteRecipe as deleteRecipeFromStorage, loadRecipes } from "./recipeStorage";
+import { addRecipes, deleteRecipe as deleteRecipeFromStorage, loadRecipes, updateRecipe } from "./recipeStorage";
 import type { Recipe } from "../types";
 
 export interface ImportResult {
@@ -12,6 +12,7 @@ interface RecipeContextValue {
   recipes: Recipe[];
   importBeerXML: (xmlText: string, sourceFile: string) => ImportResult;
   removeRecipe: (id: string) => void;
+  togglePerennial: (id: string) => void;
 }
 
 const RecipeContext = createContext<RecipeContextValue | null>(null);
@@ -37,8 +38,16 @@ export function RecipeProvider({ children }: { children: ReactNode }) {
     setRecipes(deleteRecipeFromStorage(id));
   }
 
+  function togglePerennial(id: string) {
+    const recipe = recipes.find((r) => r.id === id);
+    if (!recipe) return;
+    setRecipes(updateRecipe({ ...recipe, perennial: !recipe.perennial }));
+  }
+
   return (
-    <RecipeContext.Provider value={{ recipes, importBeerXML, removeRecipe }}>{children}</RecipeContext.Provider>
+    <RecipeContext.Provider value={{ recipes, importBeerXML, removeRecipe, togglePerennial }}>
+      {children}
+    </RecipeContext.Provider>
   );
 }
 
