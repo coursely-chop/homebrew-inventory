@@ -11,6 +11,20 @@ function kgToLb(kg: number): number {
 function kgToOz(kg: number): number {
   return kg * 35.27396195;
 }
+
+// Grainfather rounds weight to 3 decimal kg (~1g) when it exports BeerXML,
+// so a hop dosed as a clean quarter-ounce round-trips back as noise —
+// 0.75oz becomes 0.7408oz, 1oz becomes 0.9877oz, 2oz becomes 2.0106oz.
+// Every hop amount across Ben's actual recipes lands within ~0.02oz of a
+// quarter-ounce, which is well outside what a home scale's real precision
+// would produce and squarely the signature of that rounding — so this
+// snaps back to the nearest quarter-ounce whenever it's close enough,
+// rather than carrying the conversion artifact through the whole app
+// (recipe display, deduction math, shopping list) as if it were real.
+function snapHopOz(oz: number): number {
+  const nearestQuarter = Math.round(oz * 4) / 4;
+  return Math.abs(oz - nearestQuarter) < 0.03 ? nearestQuarter : oz;
+}
 function litersToGal(l: number): number {
   return l * 0.2641720524;
 }
@@ -60,7 +74,7 @@ export function parseBeerXML(xmlText: string, sourceFile: string, existingIds: s
     const hops: HopAddition[] = Array.from(r.querySelectorAll(":scope > HOPS > HOP")).map((h) => ({
       name: text(h, "NAME"),
       alpha: num(h, "ALPHA"),
-      amountOz: kgToOz(num(h, "AMOUNT")),
+      amountOz: snapHopOz(kgToOz(num(h, "AMOUNT"))),
       use: text(h, "USE"),
       time: num(h, "TIME"),
       form: text(h, "FORM"),
