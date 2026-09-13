@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { addItem, deleteItem, loadData, saveItem } from "./storage";
+import { pushLocalToCloud } from "./cloudSync";
 import { slugify } from "./slug";
 import type { InventoryData, InventoryItem } from "../types";
 
@@ -17,6 +18,9 @@ interface InventoryContextValue {
   createItem: (input: NewItemInput) => void;
   updateItem: (item: InventoryItem) => void;
   removeItem: (itemId: string) => void;
+  /** Re-reads localStorage into state — used by the cloud-sync
+   * reconciliation when the cloud copy wins on load. */
+  reload: () => void;
 }
 
 const InventoryContext = createContext<InventoryContextValue | null>(null);
@@ -41,18 +45,25 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
       purchaseDate: new Date().toISOString(),
     };
     setData(addItem(item));
+    pushLocalToCloud();
   }
 
   function updateItem(item: InventoryItem) {
     setData(saveItem(item));
+    pushLocalToCloud();
   }
 
   function removeItem(itemId: string) {
     setData(deleteItem(itemId));
+    pushLocalToCloud();
+  }
+
+  function reload() {
+    setData(loadData());
   }
 
   return (
-    <InventoryContext.Provider value={{ items: data.items, createItem, updateItem, removeItem }}>
+    <InventoryContext.Provider value={{ items: data.items, createItem, updateItem, removeItem, reload }}>
       {children}
     </InventoryContext.Provider>
   );

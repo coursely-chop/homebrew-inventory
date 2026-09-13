@@ -5,7 +5,7 @@ import substantialHopSubXml from "../data/recipes/substantial-02-hop-sub.xml?raw
 import { parseBeerXML } from "./beerxml";
 import type { Recipe } from "../types";
 
-const STORAGE_KEY = "homebrew-recipes-data";
+export const STORAGE_KEY = "homebrew-recipes-data";
 
 // Grainfather recipes pulled in at launch via BeerXML export (see PRD: no
 // public API, so this is the realistic import path). Seeded once into

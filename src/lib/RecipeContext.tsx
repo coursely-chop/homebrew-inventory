@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { parseBeerXML } from "./beerxml";
 import { addRecipes, deleteRecipe as deleteRecipeFromStorage, loadRecipes, updateRecipe } from "./recipeStorage";
+import { pushLocalToCloud } from "./cloudSync";
 import type { Recipe } from "../types";
 
 export interface ImportResult {
@@ -13,6 +14,9 @@ interface RecipeContextValue {
   importBeerXML: (xmlText: string, sourceFile: string) => ImportResult;
   removeRecipe: (id: string) => void;
   togglePerennial: (id: string) => void;
+  /** Re-reads localStorage into state — used by the cloud-sync
+   * reconciliation when the cloud copy wins on load. */
+  reload: () => void;
 }
 
 const RecipeContext = createContext<RecipeContextValue | null>(null);
@@ -28,6 +32,7 @@ export function RecipeProvider({ children }: { children: ReactNode }) {
         recipes.map((r) => r.id)
       );
       setRecipes(addRecipes(parsed));
+      pushLocalToCloud();
       return { imported: parsed.length, error: null };
     } catch (e) {
       return { imported: 0, error: e instanceof Error ? e.message : "Failed to parse file." };
@@ -36,16 +41,22 @@ export function RecipeProvider({ children }: { children: ReactNode }) {
 
   function removeRecipe(id: string) {
     setRecipes(deleteRecipeFromStorage(id));
+    pushLocalToCloud();
   }
 
   function togglePerennial(id: string) {
     const recipe = recipes.find((r) => r.id === id);
     if (!recipe) return;
     setRecipes(updateRecipe({ ...recipe, perennial: !recipe.perennial }));
+    pushLocalToCloud();
+  }
+
+  function reload() {
+    setRecipes(loadRecipes());
   }
 
   return (
-    <RecipeContext.Provider value={{ recipes, importBeerXML, removeRecipe, togglePerennial }}>
+    <RecipeContext.Provider value={{ recipes, importBeerXML, removeRecipe, togglePerennial, reload }}>
       {children}
     </RecipeContext.Provider>
   );

@@ -1,7 +1,7 @@
 import seedData from "../data/seed-inventory.json";
 import type { InventoryData, InventoryItem } from "../types";
 
-const STORAGE_KEY = "homebrew-inventory-data";
+export const STORAGE_KEY = "homebrew-inventory-data";
 
 export function loadData(): InventoryData {
   const raw = localStorage.getItem(STORAGE_KEY);

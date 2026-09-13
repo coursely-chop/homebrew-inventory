@@ -64,6 +64,14 @@ Follows another Claude Code project already in progress; this is next in line.
   - Cross-batch pattern-spotting: surface recurring descriptive language across batches (e.g. "a little thin" mentioned 3x across batches sharing a base malt) back to Ben in his own words — not as a chart or score
 - Social feedback loop: Ben's own reactions and his wife's are the two that actually shape future brewing decisions. (Brother's feedback is rare but notable when it happens; neighbors are too polite to be useful data.)
 
+## Cloud sync
+
+Same pattern as the PT tracker project: localStorage is the fast, offline-first copy the app actually renders from; a single Supabase row is the durable copy behind it, synced through a Vercel serverless function (`api/data.ts`) that holds the real Supabase credentials server-side — the browser never sees them, only a shared `x-sync-secret` header gating the endpoint. Proportionate for a personal single-user app, not real auth.
+
+This app has two independent local stores (inventory, recipes) instead of pt-tracker's one, so they travel together as one row/one `updated_at` rather than each having its own — `cloudSync.ts` reads/writes both localStorage keys as a combined `{ inventory, recipes }` payload. Every mutation in either `InventoryContext` or `RecipeContext` pushes the current combined state to the cloud (fire-and-forget, never blocks the local save). Once per app load, the local and cloud copies are reconciled: cloud only wins if it's confirmed reachable *and* newer than the last known local write — otherwise local is pushed up. An unreachable cloud is never treated as "confirmed empty," since that's exactly the state a wiped-and-reseeded local copy would also produce, and mishandling that distinction was a real bug pt-tracker hit and fixed.
+
+Motivation: this app's inventory numbers change constantly (every deduction, every restock) and drift here is easy to miss — a stale-but-plausible quantity doesn't announce itself the way missing workout history would in pt-tracker.
+
 ## Explicit Non-Goals (v1)
 
 - No multi-user support / accounts / auth
