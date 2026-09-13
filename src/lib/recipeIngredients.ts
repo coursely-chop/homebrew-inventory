@@ -142,16 +142,19 @@ export function checkFeasibility(recipe: Recipe, items: InventoryItem[]): Recipe
 
     let substitute: HopSubstitution | undefined;
     if (item.category === "hops") {
-      // A short hop can be used across several additions (Boil + Hop Stand +
-      // Dry Hop) that would each want a different substitute amount (AA-
-      // adjusted for boil, 1:1 otherwise) — rather than blend those into one
-      // number, the suggestion is based on its single largest addition, the
-      // one that matters most for the swap.
+      // Only suggest covering the gap, not replacing a whole addition — you
+      // can use up what you've actually got first (e.g. 3.5oz of your own
+      // 4.5oz-needed Simcoe) and just top up the ~1oz shortfall with
+      // something else, rather than being told to swap out an entire
+      // addition's worth. `needed` is already AA-adjusted to this item's
+      // real potency (see effectiveTotalsByItem above), so the shortfall
+      // is expressed in "oz of this item, at its real AA" terms — that's
+      // the correct basis for converting into a substitute's oz, not the
+      // recipe's originally-assumed AA for any one addition.
       const hopRows = rows.filter((r) => r.matchedItemId === itemId && r.category === "hops");
       const dominant = hopRows.reduce((a, b) => (b.amountNeeded > a.amountNeeded ? b : a));
-      substitute =
-        suggestHopSubstitute(item.name, dominant.use ?? "", dominant.amountNeeded, dominant.recipeAA ?? null, items) ??
-        undefined;
+      const shortfall = needed - item.amount;
+      substitute = suggestHopSubstitute(item.name, dominant.use ?? "", shortfall, item.alphaAcid ?? null, items) ?? undefined;
     }
 
     short.push({ itemId, name: item.name, needed, have: item.amount, unit: item.unit, substitute });

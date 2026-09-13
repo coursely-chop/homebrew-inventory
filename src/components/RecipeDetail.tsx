@@ -60,7 +60,6 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
           <tbody>
             {recipe.fermentables.map((f, i) => (
               <tr key={i} className={isShort(`f${i}`) ? "short-row" : ""}>
-                <td className="flag">{isShort(`f${i}`) && "‼️"}</td>
                 <td>{f.name}</td>
                 <td className="num">{round(f.amountLb, 2)} lb</td>
                 <td className="dim">{f.type}</td>
@@ -77,7 +76,6 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
           <tbody>
             {recipe.hops.map((h, i) => (
               <tr key={i} className={isShort(`h${i}`) ? "short-row" : ""}>
-                <td className="flag">{isShort(`h${i}`) && "‼️"}</td>
                 <td>{h.name}</td>
                 <td className="num">{round(h.amountOz, 2)} oz</td>
                 <td className="dim">{abbreviateUse(h.use)}</td>
@@ -101,7 +99,6 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
           <tbody>
             {recipe.yeasts.map((y, i) => (
               <tr key={i} className={isShort(`y${i}`) ? "short-row" : ""}>
-                <td className="flag">{isShort(`y${i}`) && "‼️"}</td>
                 <td>{y.name}</td>
                 <td className="num">{y.displayAmount}</td>
                 <td className="dim">{y.form}</td>

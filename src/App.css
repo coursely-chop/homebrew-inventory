@@ -476,16 +476,17 @@ button.secondary {
   color: var(--text);
 }
 
-/* A row whose ingredient is short in current inventory — text-only, no row
- * background (that read as too heavy, same reasoning as the inventory list
- * dropping its low-stock row tint). */
+/* A row whose ingredient is short in current inventory — subtle background
+ * tint plus a left accent bar. The accent uses box-shadow (inset) rather
+ * than border so it doesn't change box sizing — every row in these tables
+ * gets the same first-column padding whether short or not, so nothing
+ * shifts when the accent appears. */
 .recipe-detail tr.short-row td {
-  color: var(--danger);
+  background: var(--low-bg);
 }
 
-.recipe-detail tr.short-row td.dim {
-  color: var(--danger);
-  opacity: 0.8;
+.recipe-detail tr.short-row td:first-child {
+  box-shadow: inset 2px 0 0 var(--danger);
 }
 
 @keyframes slide-in-right {
@@ -598,10 +599,10 @@ button.secondary {
   vertical-align: top;
 }
 
-.recipe-detail td.flag {
-  width: 1.2em;
-  padding-right: 2px;
-  font-size: 12px;
+/* Reserved on every row (not just short ones) so the short-row accent bar
+ * never shifts text — it just fills space that's already there. */
+.recipe-detail td:first-child {
+  padding-left: 8px;
 }
 
 .recipe-detail td.num {
