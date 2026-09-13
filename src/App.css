@@ -128,7 +128,7 @@
  * generic flex row other lists (Shopping List) use. */
 .inventory .item-list .item-row {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.55fr) minmax(0, 1.1fr) minmax(0, 0.8fr) auto;
+  grid-template-columns: minmax(0, 1.1fr) minmax(60px, 0.55fr) minmax(50px, 1.1fr) minmax(0, 0.8fr) auto;
   align-items: center;
   gap: 4px 12px;
 }
@@ -158,6 +158,19 @@
   white-space: nowrap;
 }
 
+/* Status is color-only now — a badge chip read as too loud on mobile, and
+ * it's redundant anyway on the Low/Out tabs (the tab itself already says
+ * so), so it's only applied on All where a mixed list needs the signal. */
+.item-amount.status-low {
+  color: var(--warning);
+  font-weight: 600;
+}
+
+.item-amount.status-out {
+  color: var(--danger);
+  font-weight: 600;
+}
+
 .item-aa {
   font-size: 12px;
   color: var(--text);
@@ -171,16 +184,6 @@
   letter-spacing: 0.04em;
   padding: 2px 6px;
   border-radius: 4px;
-}
-
-.badge.low {
-  background: var(--danger);
-  color: #fff;
-}
-
-.badge.out {
-  background: var(--text-h);
-  color: var(--bg);
 }
 
 .item-meta {
@@ -289,6 +292,24 @@ button {
 
 button.secondary {
   background: transparent;
+}
+
+.icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.icon-button:hover {
+  background: var(--accent-bg);
 }
 
 .item-form {
@@ -561,7 +582,9 @@ button.secondary {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--text-h);
-  margin: 0 0 6px;
+  margin: 0 0 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
 }
 
 .recipe-detail table {
@@ -573,6 +596,12 @@ button.secondary {
 .recipe-detail td {
   padding: 4px 8px 4px 0;
   vertical-align: top;
+}
+
+.recipe-detail td.flag {
+  width: 1.2em;
+  padding-right: 2px;
+  font-size: 12px;
 }
 
 .recipe-detail td.num {

@@ -42,25 +42,23 @@ export function Recipes() {
                   {r.perennial ? "★" : "☆"}
                 </button>
                 <button type="button" className="recipe-row-main" onClick={() => navigate(`/recipes/${r.id}`)}>
-                  <span className="recipe-name-line">
-                    <span className="recipe-name">{r.name}</span>
-                    {feasibility.ready ? (
-                      <span className="badge ready">ready to brew</span>
-                    ) : (
-                      <span
-                        className="badge short-badge"
-                        title={feasibility.short
-                          .map((s) => `${s.name}: have ${s.have} ${s.unit}, need ${s.needed.toFixed(2)} ${s.unit}`)
-                          .join("; ")}
-                      >
-                        short: {feasibility.short.map(shortLabel).join(", ")}
-                      </span>
-                    )}
-                  </span>
+                  <span className="recipe-name">{r.name}</span>
                   <span className="recipe-style">{r.styleName}</span>
                   <span className="recipe-summary">
                     OG {r.estOG.toFixed(3)} · ABV {r.estABV.toFixed(1)}% · IBU {Math.round(r.ibu)}
                   </span>
+                  {feasibility.ready ? (
+                    <span className="badge ready">ready to brew</span>
+                  ) : (
+                    <span
+                      className="badge short-badge"
+                      title={feasibility.short
+                        .map((s) => `${s.name}: have ${s.have} ${s.unit}, need ${s.needed.toFixed(2)} ${s.unit}`)
+                        .join("; ")}
+                    >
+                      short: {feasibility.short.map(shortLabel).join(", ")}
+                    </span>
+                  )}
                   {feasibility.unmatched.length > 0 && (
                     <span className="recipe-unmatched">not tracked: {feasibility.unmatched.join(", ")}</span>
                   )}

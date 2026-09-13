@@ -5,6 +5,16 @@ import { buildIngredientRows, checkFeasibility } from "../lib/recipeIngredients"
 import { useInventory } from "../lib/InventoryContext";
 import { DeductPanel } from "./DeductPanel";
 
+// Saves horizontal space on mobile — "Boil" is already short and stays as-is.
+const USE_ABBREVIATIONS: Record<string, string> = {
+  "Hop Stand": "WP",
+  "Dry Hop": "DH",
+};
+
+function abbreviateUse(use: string): string {
+  return USE_ABBREVIATIONS[use] ?? use;
+}
+
 export function RecipeDetail({ recipe }: { recipe: Recipe }) {
   const { items } = useInventory();
   const feasibility = checkFeasibility(recipe, items);
@@ -50,7 +60,8 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
           <tbody>
             {recipe.fermentables.map((f, i) => (
               <tr key={i} className={isShort(`f${i}`) ? "short-row" : ""}>
-                <td>{isShort(`f${i}`) && "‼️ "}{f.name}</td>
+                <td className="flag">{isShort(`f${i}`) && "‼️"}</td>
+                <td>{f.name}</td>
                 <td className="num">{round(f.amountLb, 2)} lb</td>
                 <td className="dim">{f.type}</td>
                 <td className="dim">{round(f.colorLovibond, 1)}°L</td>
@@ -66,12 +77,16 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
           <tbody>
             {recipe.hops.map((h, i) => (
               <tr key={i} className={isShort(`h${i}`) ? "short-row" : ""}>
-                <td>{isShort(`h${i}`) && "‼️ "}{h.name}</td>
+                <td className="flag">{isShort(`h${i}`) && "‼️"}</td>
+                <td>{h.name}</td>
                 <td className="num">{round(h.amountOz, 2)} oz</td>
-                <td className="dim">{h.use}</td>
+                <td className="dim">{abbreviateUse(h.use)}</td>
                 <td className="dim">
-                  {formatMinutes(h.time)}
-                  {h.temperatureF ? ` @ ${round(h.temperatureF, 0)}°F` : ""}
+                  <span className="line-break-cell">
+                    {formatMinutes(h.time)}
+                    {h.temperatureF && <br />}
+                    {h.temperatureF ? `${round(h.temperatureF, 0)}°F` : ""}
+                  </span>
                 </td>
                 <td className="dim">{h.alpha}% AA</td>
               </tr>
@@ -86,7 +101,8 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
           <tbody>
             {recipe.yeasts.map((y, i) => (
               <tr key={i} className={isShort(`y${i}`) ? "short-row" : ""}>
-                <td>{isShort(`y${i}`) && "‼️ "}{y.name}</td>
+                <td className="flag">{isShort(`y${i}`) && "‼️"}</td>
+                <td>{y.name}</td>
                 <td className="num">{y.displayAmount}</td>
                 <td className="dim">{y.form}</td>
                 <td className="dim">{y.attenuation}% attenuation</td>

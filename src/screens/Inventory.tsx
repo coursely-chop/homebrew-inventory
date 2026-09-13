@@ -1,7 +1,7 @@
 import { useState, type FocusEvent } from "react";
 import { useInventory } from "../lib/InventoryContext";
 import { ItemForm, type ItemFormValues } from "../components/ItemForm";
-import { CATEGORY_LABELS, CATEGORY_ORDER, daysSincePurchase, isLowStock, isOutOfStock, outOfStockLabel } from "../lib/inventory";
+import { CATEGORY_LABELS, CATEGORY_ORDER, daysSincePurchase, isLowStock, isOutOfStock } from "../lib/inventory";
 import { round } from "../lib/format";
 import type { IngredientCategory, InventoryItem } from "../types";
 
@@ -81,8 +81,13 @@ export function Inventory() {
               <div className="category-header">
                 <h2>{CATEGORY_LABELS[category]}</h2>
                 {tab === "all" && (
-                  <button type="button" className="secondary" onClick={() => setAddingCategory(category)}>
-                    + Add
+                  <button
+                    type="button"
+                    className="icon-button"
+                    onClick={() => setAddingCategory(category)}
+                    aria-label={`Add ${CATEGORY_LABELS[category]}`}
+                  >
+                    +
                   </button>
                 )}
               </div>
@@ -110,14 +115,17 @@ export function Inventory() {
                       </span>
 
                       <span className="item-amount-col">
-                        <span className="item-amount">
-                          {round(item.amount, 2)} {item.unit}
+                        <span
+                          className={`item-amount${
+                            tab === "all" && isOutOfStock(item)
+                              ? " status-out"
+                              : tab === "all" && isLowStock(item)
+                                ? " status-low"
+                                : ""
+                          }`}
+                        >
+                          {round(item.amount, 0)} {item.unit}
                         </span>
-                        {isOutOfStock(item) ? (
-                          <span className="badge out">{outOfStockLabel(item)}</span>
-                        ) : (
-                          isLowStock(item) && <span className="badge low">low</span>
-                        )}
                       </span>
 
                       <span className="item-meta">
