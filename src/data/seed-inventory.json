@@ -10,7 +10,7 @@
     { "id": "hops-saaz", "category": "hops", "name": "Saaz", "amount": 5.9, "unit": "oz", "notes": "", "alphaAcid": 2.5, "purchaseDate": null },
     { "id": "hops-idaho-7", "category": "hops", "name": "Idaho 7", "amount": 3.99, "unit": "oz", "notes": "", "alphaAcid": 12.7, "purchaseDate": null },
     { "id": "hops-uk-golding", "category": "hops", "name": "UK Golding", "amount": 5, "unit": "oz", "notes": "", "alphaAcid": 5.7, "purchaseDate": null },
-    { "id": "hops-chinook", "category": "hops", "name": "Chinook", "amount": 0.91, "unit": "oz", "notes": "", "alphaAcid": 11.8, "purchaseDate": null },
+    { "id": "hops-chinook", "category": "hops", "name": "Chinook", "amount": 1, "unit": "oz", "notes": "", "alphaAcid": 11.8, "purchaseDate": null },
     { "id": "hops-hallertau", "category": "hops", "name": "Hallertau", "amount": 1, "unit": "oz", "notes": "", "alphaAcid": 4, "purchaseDate": null },
     { "id": "hops-cascade", "category": "hops", "name": "Cascade", "amount": 0.01, "unit": "oz", "notes": "", "alphaAcid": 6.1, "purchaseDate": null },
     { "id": "hops-vic-secret", "category": "hops", "name": "Vic Secret", "amount": 0, "unit": "oz", "notes": "", "alphaAcid": 15.5, "purchaseDate": null },
