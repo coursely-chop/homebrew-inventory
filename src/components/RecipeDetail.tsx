@@ -1,9 +1,13 @@
 import { useState } from "react";
 import type { Recipe } from "../types";
 import { formatMinutes, round } from "../lib/format";
+import { checkFeasibility } from "../lib/recipeIngredients";
+import { useInventory } from "../lib/InventoryContext";
 import { DeductPanel } from "./DeductPanel";
 
 export function RecipeDetail({ recipe }: { recipe: Recipe }) {
+  const { items } = useInventory();
+  const feasibility = checkFeasibility(recipe, items);
   const [deducting, setDeducting] = useState(false);
 
   return (
@@ -20,9 +24,16 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
       </div>
 
       <div className="recipe-actions">
-        <button type="button" onClick={() => setDeducting(true)}>
-          Brew this — deduct inventory
-        </button>
+        {feasibility.ready ? (
+          <button type="button" onClick={() => setDeducting(true)}>
+            Brew this — deduct inventory
+          </button>
+        ) : (
+          <p className="recipe-not-ready">
+            Not ready to brew as written — short on {feasibility.short.map((s) => s.name).join(", ")}. Clone this
+            recipe with what you actually end up using, then deduct from that instead.
+          </p>
+        )}
       </div>
       {deducting && <DeductPanel recipe={recipe} onClose={() => setDeducting(false)} />}
 

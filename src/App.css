@@ -539,6 +539,16 @@ button.secondary {
   margin-bottom: 20px;
 }
 
+.recipe-not-ready {
+  margin: 0;
+  padding: 10px 12px;
+  background: var(--low-bg);
+  border: 1px solid var(--low-border);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text);
+}
+
 .deduct-panel {
   background: var(--bg-subtle);
   border: 1px solid var(--border);
