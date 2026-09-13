@@ -129,7 +129,7 @@
 .inventory .item-list .item-row {
   display: grid;
   grid-template-columns: minmax(0, 1.3fr) minmax(50px, 1.1fr) minmax(0, 0.8fr) auto;
-  align-items: center;
+  align-items: start;
   gap: 4px 12px;
 }
 
