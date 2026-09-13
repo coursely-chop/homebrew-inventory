@@ -455,14 +455,16 @@ button.secondary {
   color: var(--text);
 }
 
-/* A row whose ingredient is short in current inventory — subtle, not the
- * loud full low-stock treatment the inventory list moved away from. */
+/* A row whose ingredient is short in current inventory — text-only, no row
+ * background (that read as too heavy, same reasoning as the inventory list
+ * dropping its low-stock row tint). */
 .recipe-detail tr.short-row td {
-  background: var(--low-bg);
+  color: var(--danger);
 }
 
-.recipe-detail tr.short-row td:first-child {
-  border-left: 2px solid var(--danger);
+.recipe-detail tr.short-row td.dim {
+  color: var(--danger);
+  opacity: 0.8;
 }
 
 @keyframes slide-in-right {

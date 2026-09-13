@@ -12,9 +12,9 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
   const rows = buildIngredientRows(recipe, items);
   const [deducting, setDeducting] = useState(false);
 
-  function rowClass(key: string): string {
+  function isShort(key: string): boolean {
     const row = rows.find((r) => r.key === key);
-    return row?.matchedItemId && shortItemIds.has(row.matchedItemId) ? "short-row" : "";
+    return !!row?.matchedItemId && shortItemIds.has(row.matchedItemId);
   }
 
   return (
@@ -49,8 +49,8 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
         <table>
           <tbody>
             {recipe.fermentables.map((f, i) => (
-              <tr key={i} className={rowClass(`f${i}`)}>
-                <td>{f.name}</td>
+              <tr key={i} className={isShort(`f${i}`) ? "short-row" : ""}>
+                <td>{isShort(`f${i}`) && "‼️ "}{f.name}</td>
                 <td className="num">{round(f.amountLb, 2)} lb</td>
                 <td className="dim">{f.type}</td>
                 <td className="dim">{round(f.colorLovibond, 1)}°L</td>
@@ -65,8 +65,8 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
         <table>
           <tbody>
             {recipe.hops.map((h, i) => (
-              <tr key={i} className={rowClass(`h${i}`)}>
-                <td>{h.name}</td>
+              <tr key={i} className={isShort(`h${i}`) ? "short-row" : ""}>
+                <td>{isShort(`h${i}`) && "‼️ "}{h.name}</td>
                 <td className="num">{round(h.amountOz, 2)} oz</td>
                 <td className="dim">{h.use}</td>
                 <td className="dim">
@@ -85,8 +85,8 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
         <table>
           <tbody>
             {recipe.yeasts.map((y, i) => (
-              <tr key={i} className={rowClass(`y${i}`)}>
-                <td>{y.name}</td>
+              <tr key={i} className={isShort(`y${i}`) ? "short-row" : ""}>
+                <td>{isShort(`y${i}`) && "‼️ "}{y.name}</td>
                 <td className="num">{y.displayAmount}</td>
                 <td className="dim">{y.form}</td>
                 <td className="dim">{y.attenuation}% attenuation</td>
