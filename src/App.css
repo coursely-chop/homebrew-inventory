@@ -128,7 +128,7 @@
  * generic flex row other lists (Shopping List) use. */
 .inventory .item-list .item-row {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr) minmax(0, 0.8fr) auto;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.55fr) minmax(0, 1.1fr) minmax(0, 0.8fr) auto;
   align-items: center;
   gap: 4px 12px;
 }
@@ -185,10 +185,19 @@
 
 .item-meta {
   display: flex;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 2px 10px;
   font-size: 13px;
   color: var(--text);
   opacity: 0.8;
+  min-width: 0;
+}
+
+.item-notes {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .item-freshness.unknown {
