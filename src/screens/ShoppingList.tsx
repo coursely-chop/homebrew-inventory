@@ -2,7 +2,6 @@ import { useRecipes } from "../lib/RecipeContext";
 import { useInventory } from "../lib/InventoryContext";
 import { buildShoppingList } from "../lib/shoppingList";
 import { CATEGORY_LABELS, CATEGORY_ORDER } from "../lib/inventory";
-import { round } from "../lib/format";
 import type { IngredientCategory } from "../types";
 
 export function ShoppingList() {
@@ -41,12 +40,8 @@ export function ShoppingList() {
                     <li key={line.itemId} className="item-row shopping-line">
                       <div className="item-main">
                         <span className="item-name">{line.name}</span>
-                        <span className="item-amount">buy {round(line.toBuy, 1)} {line.unit}</span>
                       </div>
                       <div className="item-meta">
-                        <span>
-                          have {round(line.have, 1)} {line.unit} · need {round(line.needed, 1)} {line.unit}
-                        </span>
                         <span className="shopping-used-in">for: {line.usedIn.join(", ")}</span>
                       </div>
                     </li>
