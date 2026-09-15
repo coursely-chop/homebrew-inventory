@@ -33,6 +33,7 @@ function App() {
           <Nav />
           <Routes>
             <Route path="/" element={<Inventory />} />
+            <Route path="/history" element={<Inventory />} />
             <Route path="/recipes" element={<Recipes />} />
             <Route path="/recipes/:id" element={<RecipeDetailPage />} />
             <Route path="/shopping-list" element={<ShoppingList />} />
