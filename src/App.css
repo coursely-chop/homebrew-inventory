@@ -1,19 +1,16 @@
-/* The single biggest structural break in the app — chrome vs. everything
- * else — gets the heaviest rule in the scale. */
 .app-nav {
   display: flex;
   gap: 4px;
   max-width: 640px;
   margin: 0 auto;
   padding: 16px 16px 16px;
-  border-bottom: var(--rule-1) solid var(--text-h);
 }
 
 .app-nav a {
   color: var(--text);
   text-decoration: none;
   padding: 6px 12px;
-  border-radius: 0;
+  border-radius: 9999px;
   font-weight: 700;
   font-size: 14px;
 }
@@ -342,12 +339,14 @@ button.secondary {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   padding: 0;
+  border: none;
   border-radius: 50%;
   background: transparent;
-  font-size: 18px;
+  font-size: 22px;
+  font-weight: 800;
   line-height: 1;
   color: var(--accent);
 }
