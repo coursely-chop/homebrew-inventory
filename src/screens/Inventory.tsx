@@ -2,7 +2,15 @@ import { useState, type FocusEvent } from "react";
 import { useInventory } from "../lib/InventoryContext";
 import { ItemForm, type ItemFormValues } from "../components/ItemForm";
 import { LogPastBrew } from "../components/LogPastBrew";
-import { CATEGORY_LABELS, CATEGORY_ORDER, effectiveAlphaAcid, freshnessLabel, isLowStock, isOutOfStock } from "../lib/inventory";
+import {
+  CATEGORY_LABELS,
+  CATEGORY_ORDER,
+  degradationBackground,
+  effectiveAlphaAcid,
+  freshnessLabel,
+  isLowStock,
+  isOutOfStock,
+} from "../lib/inventory";
 import { round } from "../lib/format";
 import type { DeductionLogEntry, IngredientCategory, InventoryItem } from "../types";
 
@@ -118,7 +126,7 @@ export function Inventory() {
                           />
                         </li>
                       ) : (
-                        <li key={item.id} className="item-row">
+                        <li key={item.id} className="item-row" style={{ backgroundColor: degradationBackground(item) }}>
                           <span className="item-name-col">
                             <span className="item-name">{item.name}</span>
                             {item.category === "hops" && item.alphaAcid !== undefined && (

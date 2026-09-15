@@ -92,3 +92,24 @@ export function effectiveAlphaAcid(item: InventoryItem): number | undefined {
   const rate = item.sealed ? SEALED_MONTHLY_DECAY : OPENED_MONTHLY_DECAY;
   return Math.max(item.alphaAcid * (1 - rate * monthsSinceAdded), 0);
 }
+
+// AA% loss at or above this fraction reads as fully "degraded" (pure red)
+// — beyond a point, further decay isn't worth distinguishing visually.
+const DEGRADATION_CAP = 0.15;
+
+/** Subtle row-background tint for a hop, scaling with how much AA% it's
+ * lost: none for a fresh/undecayed item, through yellow, to red as loss
+ * approaches DEGRADATION_CAP. Low alpha over the theme's own background
+ * (rather than a fixed light color) so it reads correctly in dark mode
+ * too. Undefined (no tint) for non-hops, missing AA%, or negligible loss. */
+export function degradationBackground(item: InventoryItem): string | undefined {
+  if (item.category !== "hops" || item.alphaAcid === undefined) return undefined;
+  const eff = effectiveAlphaAcid(item);
+  if (eff === undefined) return undefined;
+  const lossFraction = 1 - eff / item.alphaAcid;
+  if (lossFraction <= 0.005) return undefined;
+  const t = Math.min(lossFraction / DEGRADATION_CAP, 1);
+  const hue = 60 - 60 * t; // 60 = yellow, 0 = red
+  const alpha = 0.08 + 0.12 * t;
+  return `hsla(${hue}, 75%, 50%, ${alpha})`;
+}
