@@ -65,7 +65,8 @@
 
 /* Inventory's header carries a second control (History) on the same
  * line, baseline-aligned with the title and pinned to the far edge. */
-.inventory-header {
+.inventory-header,
+.recipes-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -77,17 +78,24 @@
   text-decoration: none;
 }
 
-.history-toggle {
+/* A simple top-right header action — History on Inventory, Import on
+ * Recipes — styled and positioned identically wherever it's used. */
+.header-link {
   flex: none;
+  background: none;
+  border: none;
+  padding: 0;
   color: var(--icon-accent);
   text-decoration: none;
+  font: inherit;
   font-size: 15px;
   font-weight: 700;
   line-height: 1;
   white-space: nowrap;
+  cursor: pointer;
 }
 
-.history-toggle:hover {
+.header-link:hover {
   text-decoration: underline;
 }
 
@@ -408,7 +416,17 @@ button.secondary {
 .import-actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
+}
+
+.import-actions-sep {
+  color: var(--border);
+}
+
+.import-actions button.link {
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .paste-panel {

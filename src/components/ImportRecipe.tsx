@@ -39,15 +39,17 @@ export function ImportRecipe() {
   return (
     <div className="import-recipe">
       <div className="import-actions">
-        <button type="button" onClick={() => fileInputRef.current?.click()}>
+        <button type="button" className="link" onClick={() => fileInputRef.current?.click()}>
           Import BeerXML file
         </button>
-        <button type="button" className="secondary" onClick={() => setPasteOpen((v) => !v)}>
+        <span className="import-actions-sep">·</span>
+        <button type="button" className="link" onClick={() => setPasteOpen((v) => !v)}>
           {pasteOpen ? "Cancel paste" : "Paste XML instead"}
         </button>
+        <span className="import-actions-sep">·</span>
         <button
           type="button"
-          className="secondary"
+          className="link"
           onClick={handleRefresh}
           title="Re-parses the built-in recipes with the latest fixes — keeps your ★ perennial flags, doesn't touch recipes you've imported yourself"
         >
@@ -64,7 +66,7 @@ export function ImportRecipe() {
             onChange={(e) => setPasteText(e.target.value)}
             rows={6}
           />
-          <button type="button" onClick={handlePasteImport}>
+          <button type="button" className="link" onClick={handlePasteImport}>
             Import pasted XML
           </button>
         </div>

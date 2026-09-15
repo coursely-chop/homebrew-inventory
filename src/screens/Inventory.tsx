@@ -38,7 +38,7 @@ export function Inventory() {
         <h1>
           <Link to="/">Inventory</Link>
         </h1>
-        <Link to={showHistory ? "/" : "/history"} className="history-toggle">
+        <Link to={showHistory ? "/" : "/history"} className="header-link">
           {showHistory ? "‹ Inventory" : `History (${deductionLog.length})`}
         </Link>
       </header>

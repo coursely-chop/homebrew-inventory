@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecipes } from "../lib/RecipeContext";
 import { useInventory } from "../lib/InventoryContext";
@@ -16,14 +17,18 @@ export function Recipes() {
   const { recipes, removeRecipe, togglePerennial } = useRecipes();
   const { items } = useInventory();
   const navigate = useNavigate();
+  const [importOpen, setImportOpen] = useState(false);
 
   return (
     <div className="recipes">
       <header className="recipes-header">
         <h1>Recipes</h1>
+        <button type="button" className="header-link" onClick={() => setImportOpen((v) => !v)}>
+          {importOpen ? "Close" : "Import"}
+        </button>
       </header>
 
-      <ImportRecipe />
+      {importOpen && <ImportRecipe />}
 
       {recipes.length === 0 ? (
         <p className="empty">No recipes imported yet.</p>
