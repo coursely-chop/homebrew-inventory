@@ -12,12 +12,27 @@ function normalizeTokens(name: string): string[] {
     .filter(Boolean);
 }
 
+// So generic across grain names ("Pale Malt", "Sour Malt", "Chocolate
+// Malt"...) that sharing them contributes no real discriminating signal —
+// counting them in the token score only dilutes matches against a
+// concise inventory name like "US 2-Row" that never included them at all
+// ("Pale Malt (2-Row)" vs "US 2-Row" scores 0.4 unfiltered, well below
+// SUGGEST_THRESHOLD, purely because "pale"/"malt" inflate the union).
+// Never stripped down to an empty set — see filterGeneric.
+const GENERIC_GRAIN_WORDS = new Set(["malt", "pale"]);
+
+function filterGeneric(tokens: string[]): string[] {
+  const filtered = tokens.filter((t) => !GENERIC_GRAIN_WORDS.has(t));
+  return filtered.length > 0 ? filtered : tokens;
+}
+
 /** Recipe ingredient names rarely match inventory names exactly ("Premium
  * Pilsner Malt" vs "Pilsner", "Oats, Flaked" vs "Flaked Oats", "LALBREW
  * NOVALAGER" vs "Nova Lager"). Scores 0-1: 1 for an exact match ignoring
  * punctuation/case, ~0.9 when one name contains the other with punctuation
  * stripped (catches brand-prefix and word-order variants), otherwise the
- * fraction of shared words. */
+ * fraction of shared words (after dropping generic filler words that
+ * would otherwise just dilute the comparison). */
 export function matchScore(a: string, b: string): number {
   const compactA = normalizeCompact(a);
   const compactB = normalizeCompact(b);
@@ -25,8 +40,8 @@ export function matchScore(a: string, b: string): number {
   if (compactA && compactA === compactB) compactScore = 1;
   else if (compactA && compactB && (compactA.includes(compactB) || compactB.includes(compactA))) compactScore = 0.9;
 
-  const tokensA = new Set(normalizeTokens(a));
-  const tokensB = new Set(normalizeTokens(b));
+  const tokensA = new Set(filterGeneric(normalizeTokens(a)));
+  const tokensB = new Set(filterGeneric(normalizeTokens(b)));
   const intersection = [...tokensA].filter((t) => tokensB.has(t));
   const union = new Set([...tokensA, ...tokensB]);
   const tokenScore = union.size ? intersection.length / union.size : 0;
