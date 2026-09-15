@@ -6,6 +6,8 @@
   --border: #e5e4e7;
   --accent: #b8860b;
   --accent-bg: rgba(184, 134, 11, 0.1);
+  --icon-accent: #0a5cff;
+  --icon-accent-bg: rgba(10, 92, 255, 0.12);
   --danger: #b3261e;
   --warning: #9a6700;
   --low-bg: rgba(211, 47, 47, 0.08);
@@ -42,6 +44,8 @@
     --border: #2e303a;
     --accent: #e0b04f;
     --accent-bg: rgba(224, 176, 79, 0.15);
+    --icon-accent: #5c96ff;
+    --icon-accent-bg: rgba(92, 150, 255, 0.2);
     --danger: #f2857c;
     --warning: #e0a838;
     --low-bg: rgba(242, 133, 124, 0.12);
