@@ -122,11 +122,13 @@ export function Inventory() {
                           <span className="item-name-col">
                             <span className="item-name">{item.name}</span>
                             {item.category === "hops" && item.alphaAcid !== undefined && (
-                              <span className="item-aa">
+                              <span className={`item-aa${item.sealed ? "" : " unsealed"}`}>
                                 {item.alphaAcid}% AA
-                                {effAA !== undefined && round(effAA, 1) !== round(item.alphaAcid, 1)
-                                  ? ` → ${round(effAA, 1)}% eff.`
-                                  : ""}
+                                {effAA !== undefined && round(effAA, 1) !== round(item.alphaAcid, 1) ? (
+                                  <span className="item-aa-eff"> → {round(effAA, 1)}% eff.</span>
+                                ) : (
+                                  ""
+                                )}
                               </span>
                             )}
                           </span>

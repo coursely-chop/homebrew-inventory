@@ -182,8 +182,23 @@
 .item-aa {
   font-size: 12px;
   color: var(--text);
-  opacity: 0.65;
   white-space: nowrap;
+}
+
+/* Opened hops decay faster, so their AA% is worth a second look by
+ * default — sealed items stay muted since the label value is still
+ * close to accurate. Plain color (not opacity) so item-aa-eff below can
+ * still override it on a per-span basis — opacity on the parent would
+ * otherwise wash out its children too, regardless of their own color. */
+.item-aa.unsealed {
+  color: var(--text-h);
+}
+
+/* The decayed reading itself always gets the attention color, even on an
+ * otherwise-dimmed sealed item, since it's the number that overrides the
+ * label. */
+.item-aa-eff {
+  color: var(--text-h);
 }
 
 .badge {
