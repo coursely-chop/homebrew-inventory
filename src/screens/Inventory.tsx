@@ -46,91 +46,101 @@ export function Inventory() {
       {showHistory ? (
         <DeductionHistory log={deductionLog} onUndo={undoDeduction} />
       ) : (
-        CATEGORY_ORDER.filter((category) => items.some((i) => i.category === category)).map((category) => {
-          const categoryItems = items
-            .filter((i) => i.category === category)
-            .sort((a, b) => a.name.localeCompare(b.name));
+        CATEGORY_ORDER.filter((category) => items.some((i) => i.category === category && !isOutOfStock(i))).map(
+          (category) => {
+            const categoryItems = items
+              .filter((i) => i.category === category && !isOutOfStock(i))
+              .sort((a, b) => a.name.localeCompare(b.name));
 
-          return (
-            <section key={category} className="category-section">
-              <div className="category-header">
-                <h2>{CATEGORY_LABELS[category]}</h2>
-                <button
-                  type="button"
-                  className="icon-button"
-                  onClick={() => setAddingCategory(category)}
-                  aria-label={`Add ${CATEGORY_LABELS[category]}`}
-                >
-                  +
-                </button>
-              </div>
+            return (
+              <section key={category} className="category-section">
+                <div className="category-header">
+                  <h2>{CATEGORY_LABELS[category]}</h2>
+                  <button
+                    type="button"
+                    className="icon-button"
+                    onClick={() => setAddingCategory(category)}
+                    aria-label={`Add ${CATEGORY_LABELS[category]}`}
+                  >
+                    +
+                  </button>
+                </div>
 
-              {addingCategory === category && (
-                <ItemForm defaultCategory={category} onSubmit={handleCreate} onCancel={() => setAddingCategory(null)} />
-              )}
+                {addingCategory === category && (
+                  <ItemForm
+                    defaultCategory={category}
+                    onSubmit={handleCreate}
+                    onCancel={() => setAddingCategory(null)}
+                  />
+                )}
 
-              <ul className="item-list">
-                {categoryItems.map((item) => {
-                  const effAA = item.category === "hops" ? effectiveAlphaAcid(item) : undefined;
-                  return editingId === item.id ? (
-                    <li key={item.id} className="item-row editing">
-                      <ItemForm
-                        initial={item}
-                        onSubmit={(values) => handleUpdate(item, values)}
-                        onCancel={() => setEditingId(null)}
-                      />
-                    </li>
-                  ) : (
-                    <li key={item.id} className="item-row" style={{ backgroundColor: degradationBackground(item) }}>
-                      <span className="item-name-col">
-                        <span className="item-name">{item.name}</span>
-                        {item.category === "hops" && item.alphaAcid !== undefined && (
-                          <span className={`item-aa${item.sealed ? "" : " unsealed"}`}>
-                            {item.alphaAcid}% AA
-                            {effAA !== undefined && round(effAA, 1) !== round(item.alphaAcid, 1) ? (
-                              <span className="item-aa-eff"> → {round(effAA, 1)}% eff.</span>
-                            ) : (
-                              ""
-                            )}
-                          </span>
-                        )}
-                      </span>
-
-                      <span className="item-amount-col">
-                        <span
-                          className={`item-amount${
-                            isOutOfStock(item) ? " status-out" : isLowStock(item) ? " status-low" : ""
-                          }`}
-                        >
-                          {round(item.amount, 1)} {item.unit}
+                <ul className="item-list">
+                  {categoryItems.map((item) => {
+                    const effAA = item.category === "hops" ? effectiveAlphaAcid(item) : undefined;
+                    return editingId === item.id ? (
+                      <li key={item.id} className="item-row editing">
+                        <ItemForm
+                          initial={item}
+                          onSubmit={(values) => handleUpdate(item, values)}
+                          onCancel={() => setEditingId(null)}
+                        />
+                      </li>
+                    ) : (
+                      <li
+                        key={item.id}
+                        className="item-row"
+                        style={{ backgroundColor: degradationBackground(item) }}
+                      >
+                        <span className="item-name-col">
+                          <span className="item-name">{item.name}</span>
+                          {item.category === "hops" && item.alphaAcid !== undefined && (
+                            <span className={`item-aa${item.sealed ? "" : " unsealed"}`}>
+                              {item.alphaAcid}% AA
+                              {effAA !== undefined && round(effAA, 1) !== round(item.alphaAcid, 1) ? (
+                                <span className="item-aa-eff"> → {round(effAA, 1)}% eff.</span>
+                              ) : (
+                                ""
+                              )}
+                            </span>
+                          )}
                         </span>
-                      </span>
 
-                      <span className="item-meta">
-                        {item.notes && <span className="item-notes">{item.notes}</span>}
-                        <FreshnessLabel item={item} />
-                      </span>
+                        <span className="item-amount-col">
+                          <span
+                            className={`item-amount${
+                              isOutOfStock(item) ? " status-out" : isLowStock(item) ? " status-low" : ""
+                            }`}
+                          >
+                            {round(item.amount, 1)} {item.unit}
+                          </span>
+                        </span>
 
-                      <RowMenu
-                        open={openMenuId === item.id}
-                        onToggle={() => setOpenMenuId(openMenuId === item.id ? null : item.id)}
-                        onClose={() => setOpenMenuId(null)}
-                        onEdit={() => {
-                          setEditingId(item.id);
-                          setOpenMenuId(null);
-                        }}
-                        onDelete={() => {
-                          removeItem(item.id);
-                          setOpenMenuId(null);
-                        }}
-                      />
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-          );
-        })
+                        <span className="item-meta">
+                          {item.notes && <span className="item-notes">{item.notes}</span>}
+                          <FreshnessLabel item={item} />
+                        </span>
+
+                        <RowMenu
+                          open={openMenuId === item.id}
+                          onToggle={() => setOpenMenuId(openMenuId === item.id ? null : item.id)}
+                          onClose={() => setOpenMenuId(null)}
+                          onEdit={() => {
+                            setEditingId(item.id);
+                            setOpenMenuId(null);
+                          }}
+                          onDelete={() => {
+                            removeItem(item.id);
+                            setOpenMenuId(null);
+                          }}
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            );
+          }
+        )
       )}
     </div>
   );
