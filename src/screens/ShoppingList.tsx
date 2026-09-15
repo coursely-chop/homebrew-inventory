@@ -14,11 +14,11 @@ export function ShoppingList() {
     <div className="shopping-list">
       <header className="shopping-header">
         <h1>Shopping List</h1>
-        <p className="shopping-subtitle">
-          {perennialRecipes.length === 0
-            ? "Nothing here yet."
-            : `Built from ${perennialRecipes.length} perennial recipe${perennialRecipes.length === 1 ? "" : "s"}.`}
-        </p>
+        {perennialRecipes.length > 0 && (
+          <p className="shopping-subtitle">
+            {`Built from ${perennialRecipes.length} perennial recipe${perennialRecipes.length === 1 ? "" : "s"}.`}
+          </p>
+        )}
       </header>
 
       {perennialRecipes.length === 0 ? (

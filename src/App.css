@@ -70,7 +70,7 @@
  * line, baseline-aligned with the title and pinned to the far edge. */
 .inventory-header {
   display: flex;
-  align-items: baseline;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
 }
@@ -86,6 +86,7 @@
   text-decoration: none;
   font-size: 15px;
   font-weight: 700;
+  line-height: 1;
   white-space: nowrap;
 }
 
@@ -101,7 +102,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 6px;
+  gap: 2px;
   border-bottom: var(--rule-3) solid var(--text-h);
   padding-bottom: 6px;
   margin-bottom: 8px;
