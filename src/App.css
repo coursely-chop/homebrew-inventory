@@ -1,18 +1,19 @@
 .app-nav {
   display: flex;
-  gap: 4px;
+  gap: 8px;
   max-width: 640px;
   margin: 0 auto;
   padding: 16px 16px 16px;
 }
 
 .app-nav a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
   color: var(--text);
-  text-decoration: none;
-  padding: 6px 12px;
   border-radius: 9999px;
-  font-weight: 700;
-  font-size: 14px;
 }
 
 .app-nav a.active {

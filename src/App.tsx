@@ -4,6 +4,7 @@ import { InventoryProvider } from "./lib/InventoryContext";
 import { RecipeProvider } from "./lib/RecipeContext";
 import { ShoppingListProvider } from "./lib/ShoppingListContext";
 import { CloudSyncBoot } from "./lib/CloudSyncBoot";
+import { InventoryIcon, RecipesIcon, ShoppingListIcon } from "./components/NavIcons";
 import { Inventory } from "./screens/Inventory";
 import { Recipes } from "./screens/Recipes";
 import { RecipeDetailPage } from "./screens/RecipeDetailPage";
@@ -12,14 +13,14 @@ import { ShoppingList } from "./screens/ShoppingList";
 function Nav() {
   return (
     <nav className="app-nav">
-      <NavLink to="/" end className={({ isActive }) => (isActive ? "active" : "")}>
-        Inventory
+      <NavLink to="/" end className={({ isActive }) => (isActive ? "active" : "")} aria-label="Inventory">
+        <InventoryIcon />
       </NavLink>
-      <NavLink to="/recipes" className={({ isActive }) => (isActive ? "active" : "")}>
-        Recipes
+      <NavLink to="/recipes" className={({ isActive }) => (isActive ? "active" : "")} aria-label="Recipes">
+        <RecipesIcon />
       </NavLink>
-      <NavLink to="/shopping-list" className={({ isActive }) => (isActive ? "active" : "")}>
-        Shopping List
+      <NavLink to="/shopping-list" className={({ isActive }) => (isActive ? "active" : "")} aria-label="Shopping List">
+        <ShoppingListIcon />
       </NavLink>
     </nav>
   );
