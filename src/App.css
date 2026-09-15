@@ -46,13 +46,21 @@
   margin: 0;
 }
 
-.shopping-header h1 {
-  margin-bottom: 4px;
+/* Same treatment as .inventory-header — a secondary line pinned to the
+ * far right, aligned with the title instead of stacking beneath it. */
+.shopping-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .shopping-subtitle {
+  flex: none;
   margin: 0;
-  font-size: 13px;
+  font-size: 15px;
+  line-height: 1;
+  white-space: nowrap;
   opacity: 0.7;
 }
 
