@@ -93,20 +93,18 @@ export function effectiveAlphaAcid(item: InventoryItem): number | undefined {
   return Math.max(item.alphaAcid * (1 - rate * monthsSinceAdded), 0);
 }
 
-// AA% loss at or above this fraction reads as fully "degraded" (the brown
-// end of the scale) — beyond a point, further decay isn't worth
+// AA% loss at or above this fraction reads as fully "degraded" (the
+// orange end of the scale) — beyond a point, further decay isn't worth
 // distinguishing visually.
 const DEGRADATION_CAP = 0.15;
 
 // Three color stops the degradation scale interpolates through: green
-// (freshest known state) -> yellow (halfway to DEGRADATION_CAP) -> brown
-// (at or past DEGRADATION_CAP). Brown needs lower saturation/lightness
-// alongside the hue shift, not just a hue rotation, or it reads as orange
-// instead.
+// (freshest known state) -> yellow (halfway to DEGRADATION_CAP) -> orange
+// (at or past DEGRADATION_CAP).
 const DEGRADATION_STOPS: { h: number; s: number; l: number }[] = [
   { h: 130, s: 55, l: 45 }, // green
   { h: 50, s: 70, l: 50 }, // yellow
-  { h: 30, s: 45, l: 30 }, // brown
+  { h: 25, s: 80, l: 50 }, // orange
 ];
 
 function lerp(a: number, b: number, t: number): number {
@@ -114,7 +112,7 @@ function lerp(a: number, b: number, t: number): number {
 }
 
 /** Subtle row-background tint for a hop, scaling with how much AA% it's
- * lost — green at no loss, through yellow, to brown as loss approaches
+ * lost — green at no loss, through yellow, to orange as loss approaches
  * DEGRADATION_CAP. Low alpha over the theme's own background (rather than
  * a fixed light color) so it reads correctly in dark mode too. Undefined
  * (no tint) for non-hops, missing AA%, or unknown purchase date — "we
