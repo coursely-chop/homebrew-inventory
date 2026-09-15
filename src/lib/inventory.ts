@@ -49,3 +49,15 @@ export function daysSincePurchase(item: InventoryItem): number | null {
   const ms = Date.now() - new Date(item.purchaseDate).getTime();
   return Math.floor(ms / (1000 * 60 * 60 * 24));
 }
+
+/** Freshness as shown in the UI — exact days for the first month, then a
+ * rounded month count, since "94d ago" reads as falsely precise once
+ * you're months out from purchase. */
+export function freshnessLabel(item: InventoryItem): string {
+  const days = daysSincePurchase(item);
+  if (days === null) return "baseline";
+  if (days === 0) return "added today";
+  if (days < 30) return `added ${days}d ago`;
+  const months = Math.round(days / 30.44);
+  return `added ~${months}mo ago`;
+}

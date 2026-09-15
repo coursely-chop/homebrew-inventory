@@ -2,7 +2,7 @@ import { useState, type FocusEvent } from "react";
 import { useInventory } from "../lib/InventoryContext";
 import { ItemForm, type ItemFormValues } from "../components/ItemForm";
 import { LogPastBrew } from "../components/LogPastBrew";
-import { CATEGORY_LABELS, CATEGORY_ORDER, daysSincePurchase, isLowStock, isOutOfStock } from "../lib/inventory";
+import { CATEGORY_LABELS, CATEGORY_ORDER, freshnessLabel, isLowStock, isOutOfStock } from "../lib/inventory";
 import { round } from "../lib/format";
 import type { DeductionLogEntry, IngredientCategory, InventoryItem } from "../types";
 
@@ -261,8 +261,6 @@ function RowMenu({
 }
 
 function FreshnessLabel({ item }: { item: InventoryItem }) {
-  const days = daysSincePurchase(item);
-  if (days === null) return <span className="item-freshness unknown">baseline</span>;
-  if (days === 0) return <span className="item-freshness">added today</span>;
-  return <span className="item-freshness">added {days}d ago</span>;
+  const label = freshnessLabel(item);
+  return <span className={`item-freshness${item.purchaseDate ? "" : " unknown"}`}>{label}</span>;
 }
