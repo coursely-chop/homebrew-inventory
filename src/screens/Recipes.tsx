@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useRecipes } from "../lib/RecipeContext";
 import { useInventory } from "../lib/InventoryContext";
 import { ImportRecipe } from "../components/ImportRecipe";
+import { DeleteIcon } from "../components/Icons";
 import { checkFeasibility, type ShortIngredient } from "../lib/recipeIngredients";
 import { round } from "../lib/format";
 
@@ -68,8 +69,13 @@ export function Recipes() {
                     <span className="recipe-unmatched">not tracked: {feasibility.unmatched.join(", ")}</span>
                   )}
                 </button>
-                <button type="button" className="link danger" onClick={() => removeRecipe(r.id)}>
-                  Delete
+                <button
+                  type="button"
+                  className="recipe-delete"
+                  aria-label={`Delete ${r.name}`}
+                  onClick={() => removeRecipe(r.id)}
+                >
+                  <DeleteIcon />
                 </button>
               </li>
             );
