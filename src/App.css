@@ -346,10 +346,15 @@ button.secondary {
   border: none;
   border-radius: 50%;
   background: transparent;
-  font-size: 22px;
-  font-weight: 800;
+  font-size: 24px;
+  font-weight: 900;
   line-height: 1;
   color: var(--icon-accent);
+  /* Optical correction — a "+" glyph's visual center sits a little low
+   * relative to the header text's cap-height, since it's rendered with
+   * the same reserved descender space as any other character. */
+  position: relative;
+  top: -2px;
 }
 
 .icon-button:hover {
