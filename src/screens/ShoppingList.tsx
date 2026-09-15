@@ -39,9 +39,7 @@ export function ShoppingList() {
         </p>
       )}
 
-      {CATEGORY_ORDER.filter(
-        (c) => c !== "misc" || lines.some((l) => l.category === c) || manualItems.some((m) => m.category === c)
-      ).map((category) => {
+      {CATEGORY_ORDER.map((category) => {
         const autoLines = lines.filter((l) => l.category === category);
         const manual = manualItems.filter((m) => m.category === category);
 

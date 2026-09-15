@@ -38,7 +38,7 @@ export const CATEGORY_LABELS: Record<IngredientCategory, string> = {
   hops: "Hops",
   grain: "Grain",
   yeast: "Yeast",
-  misc: "Misc",
+  misc: "Other stuff",
 };
 
 export const CATEGORY_ORDER: IngredientCategory[] = ["hops", "grain", "yeast", "misc"];

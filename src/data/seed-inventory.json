@@ -15,7 +15,7 @@
     { "id": "hops-cascade", "category": "hops", "name": "Cascade", "amount": 16.01, "unit": "oz", "notes": "", "alphaAcid": 6.1, "sealed": true, "purchaseDate": "2026-09-13T22:17:14.000Z" },
     { "id": "hops-vic-secret", "category": "hops", "name": "Vic Secret", "amount": 0, "unit": "oz", "notes": "", "alphaAcid": 15.5, "sealed": false, "purchaseDate": "2025-11-22T12:00:00.000Z" },
     { "id": "hops-centennial", "category": "hops", "name": "Centennial", "amount": 16, "unit": "oz", "notes": "", "alphaAcid": 10.5, "sealed": true, "purchaseDate": "2026-09-13T22:17:14.000Z" },
-    { "id": "grain-us-2-row", "category": "grain", "name": "US 2-Row", "amount": 25.5, "unit": "lb", "notes": "", "purchaseDate": "2026-05-17T12:00:00.000Z" },
+    { "id": "grain-us-2-row", "category": "grain", "name": "US 2-Row", "amount": 30, "unit": "lb", "notes": "", "purchaseDate": "2026-05-17T12:00:00.000Z" },
     { "id": "grain-flaked-oats", "category": "grain", "name": "Flaked Oats", "amount": 10.5, "unit": "lb", "notes": "", "purchaseDate": "2026-05-17T12:00:00.000Z" },
     { "id": "grain-carapils", "category": "grain", "name": "Carapils", "amount": 7, "unit": "lb", "notes": "", "purchaseDate": "2026-05-17T12:00:00.000Z" },
     { "id": "grain-white-wheat", "category": "grain", "name": "White Wheat", "amount": 6.25, "unit": "lb", "notes": "", "purchaseDate": "2026-05-17T12:00:00.000Z" },
