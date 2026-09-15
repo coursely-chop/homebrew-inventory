@@ -12,6 +12,7 @@ export interface NewItemInput {
   unit: string;
   notes: string;
   alphaAcid?: number;
+  sealed?: boolean;
 }
 
 export interface DeductionRequest {
@@ -66,6 +67,7 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
       unit: input.unit,
       notes: input.notes,
       alphaAcid: input.alphaAcid,
+      sealed: input.sealed,
       // A newly logged purchase, not baseline stock — gets real freshness tracking.
       purchaseDate: new Date().toISOString(),
     };

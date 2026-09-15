@@ -1,5 +1,6 @@
 import { suggestMatch } from "./ingredientMatch";
 import { computeEffectiveAmount, suggestHopSubstitute, type HopSubstitution } from "./hopSubstitution";
+import { effectiveAlphaAcid } from "./inventory";
 import type { IngredientCategory, InventoryItem, Recipe } from "../types";
 
 export interface IngredientRow {
@@ -94,7 +95,7 @@ export function effectiveAmount(row: IngredientRow, items: InventoryItem[]): num
   const item = row.matchedItemId ? items.find((i) => i.id === row.matchedItemId) : undefined;
   if (!item) return row.amountNeeded;
   const isBoil = row.category === "hops" && row.use === "Boil";
-  return computeEffectiveAmount(isBoil, row.recipeAA ?? null, item.alphaAcid, row.amountNeeded).amount;
+  return computeEffectiveAmount(isBoil, row.recipeAA ?? null, effectiveAlphaAcid(item), row.amountNeeded).amount;
 }
 
 /** Same as totalsByItem, but using effectiveAmount per row — this is what
@@ -154,7 +155,7 @@ export function checkFeasibility(recipe: Recipe, items: InventoryItem[]): Recipe
       const hopRows = rows.filter((r) => r.matchedItemId === itemId && r.category === "hops");
       const dominant = hopRows.reduce((a, b) => (b.amountNeeded > a.amountNeeded ? b : a));
       const shortfall = needed - item.amount;
-      substitute = suggestHopSubstitute(item.name, dominant.use ?? "", shortfall, item.alphaAcid ?? null, items) ?? undefined;
+      substitute = suggestHopSubstitute(item.name, dominant.use ?? "", shortfall, effectiveAlphaAcid(item) ?? null, items) ?? undefined;
     }
 
     short.push({ itemId, name: item.name, needed, have: item.amount, unit: item.unit, substitute });

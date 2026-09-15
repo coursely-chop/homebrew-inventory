@@ -12,6 +12,11 @@ export interface InventoryItem {
    * swap. Undefined until entered; substitution math falls back to an
    * unadjusted amount wherever it's missing. */
   alphaAcid?: number;
+  /** Hops only — whether the package is still its original unopened size.
+   * Alpha acid decays faster once opened (more oxygen exposure), so this
+   * picks which decay rate effectiveAlphaAcid() applies. Undefined is
+   * treated as opened (the more conservative assumption). */
+  sealed?: boolean;
   /** ISO date this item was added under real freshness tracking, or null for
    * baseline stock imported at launch with unknown purchase date (see PRD:
    * no backfilling historical purchase dates). */

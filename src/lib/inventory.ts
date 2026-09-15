@@ -61,3 +61,34 @@ export function freshnessLabel(item: InventoryItem): string {
   const months = Math.round(days / 30.44);
   return `added ~${months}mo ago`;
 }
+
+const SEALED_MONTHLY_DECAY = 0.0075;
+const OPENED_MONTHLY_DECAY = 0.025;
+
+/** One-time default for a hop's "sealed" toggle: this app's usual full
+ * purchase sizes are a 16oz bag or a 1lb bag, so still being at or above
+ * that amount reads as "probably never opened." Amount alone can't
+ * actually prove that (a partly-used bag could get topped back up, a
+ * small single-ounce packet starts under the bar while genuinely sealed),
+ * so this is only a starting guess — sealed stays a real, user-editable
+ * field after that. */
+export function defaultSealed(amount: number, unit: string): boolean {
+  if (unit === "oz") return amount >= 16;
+  if (unit === "lb") return amount >= 1;
+  return false;
+}
+
+/** Today's estimated real potency, decaying the label AA% from purchase
+ * date at ~0.75%/month sealed or ~2.5%/month opened (opened hops oxidize
+ * faster) — used anywhere bittering math should reflect actual potency
+ * instead of what the package said on day one. Falls back to the label
+ * value unadjusted when there's no known purchase date (nothing to decay
+ * from) or no recorded AA% at all. */
+export function effectiveAlphaAcid(item: InventoryItem): number | undefined {
+  if (item.alphaAcid === undefined) return undefined;
+  const days = daysSincePurchase(item);
+  if (days === null || days <= 0) return item.alphaAcid;
+  const monthsSinceAdded = days / 30.44;
+  const rate = item.sealed ? SEALED_MONTHLY_DECAY : OPENED_MONTHLY_DECAY;
+  return Math.max(item.alphaAcid * (1 - rate * monthsSinceAdded), 0);
+}

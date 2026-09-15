@@ -10,6 +10,7 @@ export interface ItemFormValues {
   unit: string;
   notes: string;
   alphaAcid?: number;
+  sealed?: boolean;
 }
 
 interface ItemFormProps {
@@ -26,6 +27,8 @@ export function ItemForm({ initial, defaultCategory, onSubmit, onCancel }: ItemF
   const [unit, setUnit] = useState(initial?.unit ?? (defaultCategory === "yeast" ? "packet" : "oz"));
   const [notes, setNotes] = useState(initial?.notes ?? "");
   const [alphaAcid, setAlphaAcid] = useState(initial?.alphaAcid !== undefined ? String(initial.alphaAcid) : "");
+  // New item defaults to sealed — you just added it, presumably fresh.
+  const [sealed, setSealed] = useState(initial?.sealed ?? true);
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -39,6 +42,7 @@ export function ItemForm({ initial, defaultCategory, onSubmit, onCancel }: ItemF
       unit: unit.trim(),
       notes: notes.trim(),
       alphaAcid: category === "hops" && !Number.isNaN(parsedAA) ? parsedAA : undefined,
+      sealed: category === "hops" ? sealed : undefined,
     });
   }
 
@@ -65,13 +69,19 @@ export function ItemForm({ initial, defaultCategory, onSubmit, onCancel }: ItemF
         <input type="text" placeholder="Unit (oz, lb, packet)" value={unit} onChange={(e) => setUnit(e.target.value)} />
       </div>
       {category === "hops" && (
-        <input
-          type="number"
-          step="any"
-          placeholder="Alpha acid % (from the package)"
-          value={alphaAcid}
-          onChange={(e) => setAlphaAcid(e.target.value)}
-        />
+        <>
+          <input
+            type="number"
+            step="any"
+            placeholder="Alpha acid % (from the package)"
+            value={alphaAcid}
+            onChange={(e) => setAlphaAcid(e.target.value)}
+          />
+          <label className="item-form-checkbox">
+            <input type="checkbox" checked={sealed} onChange={(e) => setSealed(e.target.checked)} />
+            Sealed (unopened) — affects how fast AA% is assumed to decay
+          </label>
+        </>
       )}
       <input type="text" placeholder="Notes (optional)" value={notes} onChange={(e) => setNotes(e.target.value)} />
       <div className="item-form-actions">

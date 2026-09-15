@@ -1,5 +1,6 @@
 import { HOP_SUBSTITUTES } from "../data/hopSubstitutes";
 import { normalizeCompact } from "./ingredientMatch";
+import { effectiveAlphaAcid } from "./inventory";
 import type { InventoryItem } from "../types";
 
 /** Candidate substitute names for a hop, per the AHA chart-derived map —
@@ -58,7 +59,7 @@ export function suggestHopSubstitute(
     if (item.category !== "hops") continue;
     if (!candidateNames.has(normalizeCompact(item.name))) continue;
 
-    const { amount, aaAdjusted } = computeEffectiveAmount(isBoil, recipeAA, item.alphaAcid, amountNeeded);
+    const { amount, aaAdjusted } = computeEffectiveAmount(isBoil, recipeAA, effectiveAlphaAcid(item), amountNeeded);
     if (item.amount < amount) continue; // this candidate is also short
 
     if (!best || item.amount > best.item.amount) {

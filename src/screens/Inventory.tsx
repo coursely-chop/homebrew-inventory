@@ -2,7 +2,7 @@ import { useState, type FocusEvent } from "react";
 import { useInventory } from "../lib/InventoryContext";
 import { ItemForm, type ItemFormValues } from "../components/ItemForm";
 import { LogPastBrew } from "../components/LogPastBrew";
-import { CATEGORY_LABELS, CATEGORY_ORDER, freshnessLabel, isLowStock, isOutOfStock } from "../lib/inventory";
+import { CATEGORY_LABELS, CATEGORY_ORDER, effectiveAlphaAcid, freshnessLabel, isLowStock, isOutOfStock } from "../lib/inventory";
 import { round } from "../lib/format";
 import type { DeductionLogEntry, IngredientCategory, InventoryItem } from "../types";
 
@@ -107,8 +107,9 @@ export function Inventory() {
                   )}
 
                   <ul className="item-list">
-                    {categoryItems.map((item) =>
-                      editingId === item.id ? (
+                    {categoryItems.map((item) => {
+                      const effAA = item.category === "hops" ? effectiveAlphaAcid(item) : undefined;
+                      return editingId === item.id ? (
                         <li key={item.id} className="item-row editing">
                           <ItemForm
                             initial={item}
@@ -121,7 +122,12 @@ export function Inventory() {
                           <span className="item-name-col">
                             <span className="item-name">{item.name}</span>
                             {item.category === "hops" && item.alphaAcid !== undefined && (
-                              <span className="item-aa">{item.alphaAcid}% AA</span>
+                              <span className="item-aa">
+                                {item.alphaAcid}% AA
+                                {effAA !== undefined && round(effAA, 1) !== round(item.alphaAcid, 1)
+                                  ? ` → ${round(effAA, 1)}% eff.`
+                                  : ""}
+                              </span>
                             )}
                           </span>
 
@@ -158,8 +164,8 @@ export function Inventory() {
                             }}
                           />
                         </li>
-                      )
-                    )}
+                      );
+                    })}
                     {categoryItems.length === 0 && (
                       <li className="empty">Everything here is kicked/out — check the Out tab.</li>
                     )}

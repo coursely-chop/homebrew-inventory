@@ -348,6 +348,19 @@ button.secondary {
   color: var(--text-h);
 }
 
+.item-form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.item-form-checkbox input {
+  flex: none;
+  width: auto;
+}
+
 .item-form-actions {
   display: flex;
   justify-content: flex-end;
