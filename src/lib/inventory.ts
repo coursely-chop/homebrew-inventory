@@ -93,23 +93,48 @@ export function effectiveAlphaAcid(item: InventoryItem): number | undefined {
   return Math.max(item.alphaAcid * (1 - rate * monthsSinceAdded), 0);
 }
 
-// AA% loss at or above this fraction reads as fully "degraded" (pure red)
-// — beyond a point, further decay isn't worth distinguishing visually.
+// AA% loss at or above this fraction reads as fully "degraded" (the brown
+// end of the scale) — beyond a point, further decay isn't worth
+// distinguishing visually.
 const DEGRADATION_CAP = 0.15;
 
+// Three color stops the degradation scale interpolates through: green
+// (freshest known state) -> yellow (halfway to DEGRADATION_CAP) -> brown
+// (at or past DEGRADATION_CAP). Brown needs lower saturation/lightness
+// alongside the hue shift, not just a hue rotation, or it reads as orange
+// instead.
+const DEGRADATION_STOPS: { h: number; s: number; l: number }[] = [
+  { h: 130, s: 55, l: 45 }, // green
+  { h: 50, s: 70, l: 50 }, // yellow
+  { h: 30, s: 45, l: 30 }, // brown
+];
+
+function lerp(a: number, b: number, t: number): number {
+  return a + (b - a) * t;
+}
+
 /** Subtle row-background tint for a hop, scaling with how much AA% it's
- * lost: none for a fresh/undecayed item, through yellow, to red as loss
- * approaches DEGRADATION_CAP. Low alpha over the theme's own background
- * (rather than a fixed light color) so it reads correctly in dark mode
- * too. Undefined (no tint) for non-hops, missing AA%, or negligible loss. */
+ * lost — green at no loss, through yellow, to brown as loss approaches
+ * DEGRADATION_CAP. Low alpha over the theme's own background (rather than
+ * a fixed light color) so it reads correctly in dark mode too. Undefined
+ * (no tint) for non-hops, missing AA%, or unknown purchase date — "we
+ * don't know" shouldn't render as if it were confirmed freshest. */
 export function degradationBackground(item: InventoryItem): string | undefined {
   if (item.category !== "hops" || item.alphaAcid === undefined) return undefined;
+  const days = daysSincePurchase(item);
+  if (days === null) return undefined;
   const eff = effectiveAlphaAcid(item);
   if (eff === undefined) return undefined;
-  const lossFraction = 1 - eff / item.alphaAcid;
-  if (lossFraction <= 0.005) return undefined;
+  const lossFraction = Math.max(1 - eff / item.alphaAcid, 0);
   const t = Math.min(lossFraction / DEGRADATION_CAP, 1);
-  const hue = 60 - 60 * t; // 60 = yellow, 0 = red
-  const alpha = 0.08 + 0.12 * t;
-  return `hsla(${hue}, 75%, 50%, ${alpha})`;
+
+  const segment = t <= 0.5 ? 0 : 1;
+  const localT = t <= 0.5 ? t / 0.5 : (t - 0.5) / 0.5;
+  const from = DEGRADATION_STOPS[segment];
+  const to = DEGRADATION_STOPS[segment + 1];
+  const h = lerp(from.h, to.h, localT);
+  const s = lerp(from.s, to.s, localT);
+  const l = lerp(from.l, to.l, localT);
+  const alpha = 0.1 + 0.12 * t;
+  return `hsla(${h}, ${s}%, ${l}%, ${alpha})`;
 }
