@@ -23,6 +23,16 @@ export interface InventoryItem {
   purchaseDate: string | null;
 }
 
+/** A manually-added shopping list entry — independent of the auto-computed
+ * shortage lines (see shoppingList.ts), for anything Ben wants to remember
+ * to buy that isn't necessarily a perennial-recipe shortfall. */
+export interface ShoppingListItem {
+  id: string;
+  category: IngredientCategory;
+  name: string;
+  notes: string;
+}
+
 export interface InventoryData {
   items: InventoryItem[];
 }

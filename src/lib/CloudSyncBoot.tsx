@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { adoptCloudData, fetchCloudData, getLocalUpdatedAt, pushLocalToCloud } from "./cloudSync";
 import { useInventory } from "./InventoryContext";
 import { useRecipes } from "./RecipeContext";
+import { useShoppingListItems } from "./ShoppingListContext";
 
 /** Reconciles local storage against the cloud copy: on app load, and again
  * whenever the tab regains focus/visibility — catching up a tab that's
@@ -23,6 +24,7 @@ import { useRecipes } from "./RecipeContext";
 export function CloudSyncBoot() {
   const inventory = useInventory();
   const recipes = useRecipes();
+  const shoppingListItems = useShoppingListItems();
 
   useEffect(() => {
     let running = false;
@@ -38,6 +40,7 @@ export function CloudSyncBoot() {
           adoptCloudData(cloud.data);
           inventory.reload();
           recipes.reload();
+          shoppingListItems.reload();
         } else {
           pushLocalToCloud();
         }

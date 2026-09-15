@@ -2,6 +2,7 @@ import { BrowserRouter, NavLink, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { InventoryProvider } from "./lib/InventoryContext";
 import { RecipeProvider } from "./lib/RecipeContext";
+import { ShoppingListProvider } from "./lib/ShoppingListContext";
 import { CloudSyncBoot } from "./lib/CloudSyncBoot";
 import { Inventory } from "./screens/Inventory";
 import { Recipes } from "./screens/Recipes";
@@ -28,17 +29,19 @@ function App() {
   return (
     <InventoryProvider>
       <RecipeProvider>
-        <CloudSyncBoot />
-        <BrowserRouter>
-          <Nav />
-          <Routes>
-            <Route path="/" element={<Inventory />} />
-            <Route path="/history" element={<Inventory />} />
-            <Route path="/recipes" element={<Recipes />} />
-            <Route path="/recipes/:id" element={<RecipeDetailPage />} />
-            <Route path="/shopping-list" element={<ShoppingList />} />
-          </Routes>
-        </BrowserRouter>
+        <ShoppingListProvider>
+          <CloudSyncBoot />
+          <BrowserRouter>
+            <Nav />
+            <Routes>
+              <Route path="/" element={<Inventory />} />
+              <Route path="/history" element={<Inventory />} />
+              <Route path="/recipes" element={<Recipes />} />
+              <Route path="/recipes/:id" element={<RecipeDetailPage />} />
+              <Route path="/shopping-list" element={<ShoppingList />} />
+            </Routes>
+          </BrowserRouter>
+        </ShoppingListProvider>
       </RecipeProvider>
     </InventoryProvider>
   );
