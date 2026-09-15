@@ -11,8 +11,17 @@
   --low-bg: rgba(211, 47, 47, 0.08);
   --low-border: rgba(211, 47, 47, 0.35);
 
-  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  --sans: "Helvetica Neue", Helvetica, Univers, Arial, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
+
+  /* Keyline scale — every structural rule in the app is one of these four
+   * weights, chosen by how big a division it marks: 8 = top-level chrome,
+   * 4 = section, 2 = group, 1 = finest hairline. Never an arbitrary width
+   * outside this set. */
+  --rule-1: 8px;
+  --rule-2: 4px;
+  --rule-3: 2px;
+  --rule-4: 1px;
 
   font: 16px/145% var(--sans);
   color-scheme: light dark;
@@ -55,7 +64,14 @@ body {
 h1,
 h2 {
   font-family: var(--sans);
-  font-weight: 600;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-h);
+}
+
+h3 {
+  font-family: var(--sans);
+  font-weight: 700;
   color: var(--text-h);
 }
 
