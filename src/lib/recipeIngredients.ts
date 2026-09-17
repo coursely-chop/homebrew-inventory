@@ -1,6 +1,7 @@
 import { suggestMatch } from "./ingredientMatch";
 import { computeEffectiveAmount, suggestHopSubstitute, type HopSubstitution } from "./hopSubstitution";
 import { effectiveAlphaAcid } from "./inventory";
+import { round } from "./format";
 import type { IngredientCategory, InventoryItem, Recipe } from "../types";
 
 export interface IngredientRow {
@@ -139,7 +140,11 @@ export function checkFeasibility(recipe: Recipe, items: InventoryItem[]): Recipe
   const short: ShortIngredient[] = [];
   for (const [itemId, needed] of totals) {
     const item = items.find((i) => i.id === itemId);
-    if (!item || item.amount >= needed) continue;
+    // Compare at the same 1-decimal precision the UI actually displays for
+    // both numbers — otherwise a sub-0.1 gap invisible on screen (AA-
+    // adjustment rounding noise, a hundredth of an ounce left in a
+    // container) flags as short with no visible reason why.
+    if (!item || round(item.amount, 1) >= round(needed, 1)) continue;
 
     let substitute: HopSubstitution | undefined;
     if (item.category === "hops") {
