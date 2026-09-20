@@ -22,7 +22,7 @@
     { "id": "grain-chocolate-malt", "category": "grain", "name": "Chocolate Malt", "amount": 5.5, "unit": "lb", "notes": "", "purchaseDate": null },
     { "id": "grain-vienna", "category": "grain", "name": "Vienna", "amount": 4, "unit": "lb", "notes": "", "purchaseDate": "2025-12-22T12:00:00.000Z" },
     { "id": "grain-crystal-40l", "category": "grain", "name": "Crystal 40L", "amount": 3, "unit": "lb", "notes": "", "purchaseDate": "2026-06-12T12:00:00.000Z" },
-    { "id": "grain-flaked-corn", "category": "grain", "name": "Flaked Corn", "amount": 3, "unit": "lb", "notes": "", "purchaseDate": "2025-12-22T12:00:00.000Z" },
+    { "id": "grain-flaked-corn", "category": "grain", "name": "Flaked Corn", "amount": 3.5, "unit": "lb", "notes": "", "purchaseDate": "2025-12-22T12:00:00.000Z" },
     { "id": "grain-pilsner", "category": "grain", "name": "Pilsner", "amount": 53, "unit": "lb", "notes": "", "purchaseDate": "2026-09-13T22:17:14.000Z" },
     { "id": "grain-sour-malt", "category": "grain", "name": "Sour Malt", "amount": 2.5, "unit": "lb", "notes": "", "purchaseDate": null },
     { "id": "grain-honey-malt", "category": "grain", "name": "Honey Malt", "amount": 1, "unit": "lb", "notes": "", "purchaseDate": null },

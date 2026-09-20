@@ -4,12 +4,17 @@ export function normalizeCompact(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
+// Same ingredient, different name depending on who's writing the recipe
+// ("Maize, Flaked" in BeerXML vs "Flaked Corn" in inventory).
+const TOKEN_SYNONYMS: Record<string, string> = { maize: "corn" };
+
 function normalizeTokens(name: string): string[] {
   return name
     .toLowerCase()
     .replace(/[(),-]/g, " ")
     .split(/\s+/)
-    .filter(Boolean);
+    .filter(Boolean)
+    .map((t) => TOKEN_SYNONYMS[t] ?? t);
 }
 
 // So generic across grain names ("Pale Malt", "Sour Malt", "Chocolate

@@ -171,9 +171,7 @@ function DeductionHistory({ log, onUndo }: { log: DeductionLogEntry[]; onUndo: (
               {entry.undoneAt ? (
                 <p className="history-undone-note">Undone {formatHistoryDate(entry.undoneAt)}</p>
               ) : entry.appliedToInventory ? (
-                <button type="button" className="secondary" onClick={() => onUndo(entry.id)}>
-                  Undo — restore to inventory
-                </button>
+                <RestoreLink onRestore={() => onUndo(entry.id)} />
               ) : (
                 <p className="history-undone-note">Logged only — doesn't affect current inventory</p>
               )}
@@ -182,6 +180,32 @@ function DeductionHistory({ log, onUndo }: { log: DeductionLogEntry[]; onUndo: (
         </ul>
       )}
     </>
+  );
+}
+
+/** Deliberately low-key — restoring is for "I did that by mistake," not
+ * something to invite — with a confirm step since an undone entry can't be
+ * redone. */
+function RestoreLink({ onRestore }: { onRestore: () => void }) {
+  const [confirming, setConfirming] = useState(false);
+
+  if (!confirming) {
+    return (
+      <button type="button" className="link restore-link" onClick={() => setConfirming(true)}>
+        Restore to inventory
+      </button>
+    );
+  }
+  return (
+    <span className="restore-confirm">
+      Add these amounts back?{" "}
+      <button type="button" className="link" onClick={onRestore}>
+        Restore
+      </button>
+      <button type="button" className="link" onClick={() => setConfirming(false)}>
+        Cancel
+      </button>
+    </span>
   );
 }
 

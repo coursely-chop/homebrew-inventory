@@ -738,54 +738,91 @@ button.secondary {
   margin: 0 0 10px;
 }
 
-.deduct-panel table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-  margin-bottom: 12px;
+/* One block per ingredient: name as a subheader, then three aligned
+ * lines. Stacked vertically (not a table) so nothing runs off the edge
+ * on a phone. */
+.deduct-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
-.deduct-panel th {
-  text-align: left;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  opacity: 0.6;
-  padding: 0 8px 4px 0;
+.deduct-item-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
   border-bottom: var(--rule-4) solid var(--text-h);
+  padding-bottom: 4px;
+  margin-bottom: 6px;
 }
 
-.deduct-panel td {
-  padding: 4px 8px 4px 0;
-  vertical-align: middle;
+.deduct-item h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-h);
 }
 
-.deduct-panel select {
+.deduct-recipe-name {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.deduct-item select {
+  width: 100%;
+  margin-bottom: 6px;
   font: inherit;
-  font-size: 13px;
-  padding: 4px 6px;
+  font-size: 14px;
+  padding: 6px 8px;
   border: var(--rule-4) solid var(--text-h);
   border-radius: 0;
   background: var(--bg);
   color: var(--text-h);
-  max-width: 220px;
 }
 
-.deduct-panel td.num {
+.deduct-lines {
+  margin: 0;
+  font-size: 14px;
   font-variant-numeric: tabular-nums;
-  white-space: nowrap;
+}
+
+.deduct-lines > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 0;
+}
+
+.deduct-lines dt {
+  color: var(--text);
+}
+
+.deduct-lines dd {
+  margin: 0;
+  color: var(--text-h);
+  text-align: right;
+}
+
+.deduct-after dt,
+.deduct-after dd {
+  color: var(--text-h);
+  font-weight: 800;
+}
+
+.deduct-after.short dt,
+.deduct-after.short dd {
+  color: var(--danger);
 }
 
 .aa-note {
   font-size: 11px;
   font-style: italic;
+  font-weight: 400;
   opacity: 0.7;
-  white-space: normal;
-}
-
-.deduct-panel td.num.short {
-  color: var(--danger);
-  font-weight: 600;
 }
 
 .deduct-actions {
@@ -897,4 +934,21 @@ button.secondary {
   border-radius: 0;
   background: var(--bg);
   color: var(--text-h);
+}
+
+.restore-link {
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: underline;
+}
+
+.restore-confirm {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.restore-confirm button.link {
+  font-size: 13px;
+  margin-left: 8px;
+  font-weight: 700;
 }
