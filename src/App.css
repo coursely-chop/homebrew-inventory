@@ -723,7 +723,7 @@ button.secondary {
 }
 
 .deduct-panel {
-  background: var(--accent-bg);
+  background: transparent;
   border: var(--rule-4) solid var(--border);
   border-radius: 0;
   padding: 12px;
