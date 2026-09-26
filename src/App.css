@@ -627,6 +627,9 @@ button.secondary {
 
 .recipe-page-title h1 {
   font-size: 28px;
+  /* The root's 145% line-height is inherited as a fixed ~23px, which is
+   * tighter than this 28px text — cramped once a long title wraps. */
+  line-height: 1.2;
   margin: 0;
 }
 
