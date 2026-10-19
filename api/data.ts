@@ -33,41 +33,54 @@ export default async function handler(req: any, res: any) {
 
   const baseUrl = process.env.SUPABASE_URL as string;
 
-  if (req.method === "GET") {
-    const resp = await fetch(`${baseUrl}/rest/v1/app_data?id=eq.${ROW_ID}&select=data,updated_at`, {
-      headers: supabaseHeaders(),
-    });
-    if (!resp.ok) {
-      res.status(502).json({ error: "Upstream error" });
+  // A non-ok HTTP response from Supabase (handled below, per-branch) and a
+  // hard connection failure (paused project, DNS, timeout — fetch() itself
+  // rejects rather than resolving) are both "upstream is unreachable" from
+  // this endpoint's callers' point of view, and should look the same to
+  // them: a clean 502, never an unhandled crash. The client already treats
+  // any non-200 as "reachable: false" and falls back to local data, so
+  // this failing loud here would only turn a recoverable hiccup (the free
+  // Supabase tier's project can be paused between uses) into a 500 that
+  // looks like a real bug.
+  try {
+    if (req.method === "GET") {
+      const resp = await fetch(`${baseUrl}/rest/v1/app_data?id=eq.${ROW_ID}&select=data,updated_at`, {
+        headers: supabaseHeaders(),
+      });
+      if (!resp.ok) {
+        res.status(502).json({ error: "Upstream error" });
+        return;
+      }
+      const rows = (await resp.json()) as { data: unknown; updated_at: string }[];
+      if (rows.length === 0) {
+        res.status(200).json({ data: null, updatedAt: null });
+        return;
+      }
+      res.status(200).json({ data: rows[0].data, updatedAt: rows[0].updated_at });
       return;
     }
-    const rows = (await resp.json()) as { data: unknown; updated_at: string }[];
-    if (rows.length === 0) {
-      res.status(200).json({ data: null, updatedAt: null });
-      return;
-    }
-    res.status(200).json({ data: rows[0].data, updatedAt: rows[0].updated_at });
-    return;
-  }
 
-  if (req.method === "POST") {
-    const { data } = req.body ?? {};
-    if (data === undefined) {
-      res.status(400).json({ error: "Missing data" });
+    if (req.method === "POST") {
+      const { data } = req.body ?? {};
+      if (data === undefined) {
+        res.status(400).json({ error: "Missing data" });
+        return;
+      }
+      const resp = await fetch(`${baseUrl}/rest/v1/app_data`, {
+        method: "POST",
+        headers: { ...supabaseHeaders(), Prefer: "resolution=merge-duplicates" },
+        body: JSON.stringify([{ id: ROW_ID, data, updated_at: new Date().toISOString() }]),
+      });
+      if (!resp.ok) {
+        res.status(502).json({ error: "Upstream error" });
+        return;
+      }
+      res.status(200).json({ ok: true });
       return;
     }
-    const resp = await fetch(`${baseUrl}/rest/v1/app_data`, {
-      method: "POST",
-      headers: { ...supabaseHeaders(), Prefer: "resolution=merge-duplicates" },
-      body: JSON.stringify([{ id: ROW_ID, data, updated_at: new Date().toISOString() }]),
-    });
-    if (!resp.ok) {
-      res.status(502).json({ error: "Upstream error" });
-      return;
-    }
-    res.status(200).json({ ok: true });
-    return;
-  }
 
-  res.status(405).json({ error: "Method not allowed" });
+    res.status(405).json({ error: "Method not allowed" });
+  } catch {
+    res.status(502).json({ error: "Upstream error" });
+  }
 }
