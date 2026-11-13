@@ -76,10 +76,13 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
           <tbody>
             {recipe.hops.map((h, i) => {
               // A hop's additions come grouped by use (every boil addition,
-              // then every hop stand, then every dry hop) — a keyline where
-              // that changes marks each state's boundary, which is exactly
-              // where a brew day stops and weighs out the next batch.
-              const newState = i > 0 && recipe.hops[i - 1].use !== h.use;
+              // then every hop stand, then every dry hop) and, within a use,
+              // by time (a 7-day dry hop added separately from a 3-day one)
+              // — a keyline wherever either changes marks that addition's
+              // boundary, which is exactly where a brew day stops and
+              // weighs out the next batch.
+              const prev = i > 0 ? recipe.hops[i - 1] : null;
+              const newState = prev !== null && (prev.use !== h.use || prev.time !== h.time);
               const rowClass = [isShort(`h${i}`) && "short-row", newState && "addition-divider"]
                 .filter(Boolean)
                 .join(" ");
