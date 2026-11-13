@@ -74,21 +74,31 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
         <h3>Hops</h3>
         <table>
           <tbody>
-            {recipe.hops.map((h, i) => (
-              <tr key={i} className={isShort(`h${i}`) ? "short-row" : ""}>
-                <td>{h.name}</td>
-                <td className="num">{round(h.amountOz, 2)} oz</td>
-                <td className="dim">{abbreviateUse(h.use)}</td>
-                <td className="dim">
-                  <span className="line-break-cell">
-                    {formatMinutes(h.time)}
-                    {h.temperatureF && <br />}
-                    {h.temperatureF ? `${round(h.temperatureF, 0)}°F` : ""}
-                  </span>
-                </td>
-                <td className="dim">{h.alpha}% AA</td>
-              </tr>
-            ))}
+            {recipe.hops.map((h, i) => {
+              // A hop's additions come grouped by use (every boil addition,
+              // then every hop stand, then every dry hop) — a keyline where
+              // that changes marks each state's boundary, which is exactly
+              // where a brew day stops and weighs out the next batch.
+              const newState = i > 0 && recipe.hops[i - 1].use !== h.use;
+              const rowClass = [isShort(`h${i}`) && "short-row", newState && "addition-divider"]
+                .filter(Boolean)
+                .join(" ");
+              return (
+                <tr key={i} className={rowClass}>
+                  <td>{h.name}</td>
+                  <td className="num">{round(h.amountOz, 2)} oz</td>
+                  <td className="dim">{abbreviateUse(h.use)}</td>
+                  <td className="dim">
+                    <span className="line-break-cell">
+                      {formatMinutes(h.time)}
+                      {h.temperatureF && <br />}
+                      {h.temperatureF ? `${round(h.temperatureF, 0)}°F` : ""}
+                    </span>
+                  </td>
+                  <td className="dim">{h.alpha}% AA</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </section>

@@ -684,6 +684,14 @@ button.secondary {
   vertical-align: top;
 }
 
+/* Marks where one hop addition's "use" (Boil/Hop Stand/Dry Hop) ends and
+ * the next begins — a brew-day aid, so weighing out one state's additions
+ * has a clear stopping point before starting the next. */
+.recipe-detail tr.addition-divider td {
+  border-top: var(--rule-4) solid var(--border);
+  padding-top: 8px;
+}
+
 /* Reserved on every row (not just short ones) so the short-row accent bar
  * never shifts text — it just fills space that's already there. */
 .recipe-detail td:first-child {
