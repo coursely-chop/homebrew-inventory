@@ -669,7 +669,11 @@ button.secondary {
   letter-spacing: 0.04em;
   color: var(--text-h);
   margin: 0 0 8px;
-  padding-bottom: 6px;
+  /* Matches td:first-child's left padding below (reserved there for the
+   * short-row accent bar) so the header text and the table's first
+   * column actually line up — the keyline itself is unaffected, since
+   * padding sits inside the border-bottom's full-width box. */
+  padding: 0 0 6px 8px;
   border-bottom: var(--rule-3) solid var(--text-h);
 }
 
