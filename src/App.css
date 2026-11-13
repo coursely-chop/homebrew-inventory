@@ -337,6 +337,15 @@ button.secondary {
   background: transparent;
 }
 
+button.danger {
+  background: var(--danger);
+  border-color: var(--danger);
+  /* Inverted like the nav's active pill — white-on-red in light mode,
+   * dark-on-coral in dark mode — rather than a hardcoded white that
+   * would lose contrast against --danger's lighter dark-mode shade. */
+  color: var(--bg);
+}
+
 .icon-button {
   display: flex;
   align-items: center;
@@ -467,10 +476,34 @@ button.secondary {
 
 .recipe-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
   padding: 10px 0;
+}
+
+.recipe-delete-confirm {
+  flex: 1 0 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+  padding: 10px;
+  background: var(--low-bg);
+  border: var(--rule-4) solid var(--low-border);
+}
+
+.recipe-delete-confirm span {
+  font-size: 14px;
+  color: var(--text-h);
+}
+
+.recipe-delete-confirm-actions {
+  display: flex;
+  gap: 8px;
+  flex: none;
 }
 
 .recipe-row-main {

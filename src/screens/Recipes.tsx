@@ -19,6 +19,7 @@ export function Recipes() {
   const { items } = useInventory();
   const navigate = useNavigate();
   const [importOpen, setImportOpen] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   // Perennial (starred) recipes float to the top as a group — stable
   // otherwise (Array.prototype.sort is spec-guaranteed stable), so
@@ -123,10 +124,30 @@ export function Recipes() {
                   type="button"
                   className="recipe-delete"
                   aria-label={`Delete ${r.name}`}
-                  onClick={() => removeRecipe(r.id)}
+                  onClick={() => setConfirmDeleteId(confirmDeleteId === r.id ? null : r.id)}
                 >
                   <DeleteIcon />
                 </button>
+                {confirmDeleteId === r.id && (
+                  <div className="recipe-delete-confirm">
+                    <span>Delete “{r.name}”?</span>
+                    <div className="recipe-delete-confirm-actions">
+                      <button type="button" className="secondary" onClick={() => setConfirmDeleteId(null)}>
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        className="danger"
+                        onClick={() => {
+                          removeRecipe(r.id);
+                          setConfirmDeleteId(null);
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                )}
               </li>
             );
           })}
