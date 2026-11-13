@@ -484,12 +484,11 @@ button.danger {
 }
 
 .recipe-delete-confirm {
-  flex: 1 0 100%;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 4px;
   padding: 10px;
   background: var(--low-bg);
   border: var(--rule-4) solid var(--low-border);

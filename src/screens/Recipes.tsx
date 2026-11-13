@@ -90,45 +90,7 @@ export function Recipes() {
                 }}
                 className="recipe-row"
               >
-                <button
-                  type="button"
-                  className={`star-toggle${r.perennial ? " active" : ""}`}
-                  title={r.perennial ? "Perennial — part of the standing rotation" : "Mark as perennial"}
-                  onClick={() => handleToggleStar(r.id)}
-                >
-                  {r.perennial ? "★" : "☆"}
-                </button>
-                <button type="button" className="recipe-row-main" onClick={() => navigate(`/recipes/${r.id}`)}>
-                  <span className="recipe-name">{r.name}</span>
-                  <span className="recipe-style">{r.styleName}</span>
-                  <span className="recipe-summary">
-                    OG {r.estOG.toFixed(3)} · ABV {r.estABV.toFixed(1)}% · IBU {Math.round(r.ibu)}
-                  </span>
-                  {feasibility.ready ? (
-                    <span className="badge ready">ready to brew</span>
-                  ) : (
-                    <span
-                      className="badge short-badge"
-                      title={feasibility.short
-                        .map((s) => `${s.name}: have ${s.have} ${s.unit}, need ${s.needed.toFixed(2)} ${s.unit}`)
-                        .join("; ")}
-                    >
-                      short: {feasibility.short.map(shortLabel).join(", ")}
-                    </span>
-                  )}
-                  {feasibility.unmatched.length > 0 && (
-                    <span className="recipe-unmatched">not tracked: {feasibility.unmatched.join(", ")}</span>
-                  )}
-                </button>
-                <button
-                  type="button"
-                  className="recipe-delete"
-                  aria-label={`Delete ${r.name}`}
-                  onClick={() => setConfirmDeleteId(confirmDeleteId === r.id ? null : r.id)}
-                >
-                  <DeleteIcon />
-                </button>
-                {confirmDeleteId === r.id && (
+                {confirmDeleteId === r.id ? (
                   <div className="recipe-delete-confirm">
                     <span>Delete “{r.name}”?</span>
                     <div className="recipe-delete-confirm-actions">
@@ -147,6 +109,47 @@ export function Recipes() {
                       </button>
                     </div>
                   </div>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      className={`star-toggle${r.perennial ? " active" : ""}`}
+                      title={r.perennial ? "Perennial — part of the standing rotation" : "Mark as perennial"}
+                      onClick={() => handleToggleStar(r.id)}
+                    >
+                      {r.perennial ? "★" : "☆"}
+                    </button>
+                    <button type="button" className="recipe-row-main" onClick={() => navigate(`/recipes/${r.id}`)}>
+                      <span className="recipe-name">{r.name}</span>
+                      <span className="recipe-style">{r.styleName}</span>
+                      <span className="recipe-summary">
+                        OG {r.estOG.toFixed(3)} · ABV {r.estABV.toFixed(1)}% · IBU {Math.round(r.ibu)}
+                      </span>
+                      {feasibility.ready ? (
+                        <span className="badge ready">ready to brew</span>
+                      ) : (
+                        <span
+                          className="badge short-badge"
+                          title={feasibility.short
+                            .map((s) => `${s.name}: have ${s.have} ${s.unit}, need ${s.needed.toFixed(2)} ${s.unit}`)
+                            .join("; ")}
+                        >
+                          short: {feasibility.short.map(shortLabel).join(", ")}
+                        </span>
+                      )}
+                      {feasibility.unmatched.length > 0 && (
+                        <span className="recipe-unmatched">not tracked: {feasibility.unmatched.join(", ")}</span>
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      className="recipe-delete"
+                      aria-label={`Delete ${r.name}`}
+                      onClick={() => setConfirmDeleteId(r.id)}
+                    >
+                      <DeleteIcon />
+                    </button>
+                  </>
                 )}
               </li>
             );
