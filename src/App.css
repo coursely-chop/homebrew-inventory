@@ -320,14 +320,16 @@ button.link {
 }
 
 button.link.danger {
+  background: none;
+  border: none;
   color: var(--danger);
 }
 
 button {
-  border: var(--rule-4) solid var(--text-h);
-  background: var(--accent-bg);
-  color: var(--text-h);
-  border-radius: 0;
+  border: var(--rule-4) solid var(--icon-accent);
+  background: var(--icon-accent);
+  color: var(--bg);
+  border-radius: 8px;
   padding: 6px 12px;
   font-weight: 700;
   cursor: pointer;
@@ -335,6 +337,8 @@ button {
 
 button.secondary {
   background: transparent;
+  border-color: var(--text-h);
+  color: var(--text-h);
 }
 
 button.danger {
