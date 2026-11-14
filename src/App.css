@@ -376,8 +376,8 @@ button.danger {
   flex-direction: column;
   gap: 8px;
   background: var(--bg-subtle);
-  border: var(--rule-4) solid var(--text-h);
-  border-radius: 0;
+  border: var(--rule-4) solid var(--border);
+  border-radius: 8px;
   padding: 12px;
   margin-bottom: 8px;
 }
@@ -393,8 +393,8 @@ button.danger {
   min-width: 0;
   font: inherit;
   padding: 6px 8px;
-  border: var(--rule-4) solid var(--text-h);
-  border-radius: 0;
+  border: var(--rule-4) solid var(--border);
+  border-radius: 6px;
   background: var(--bg);
   color: var(--text-h);
 }
@@ -448,8 +448,8 @@ button.danger {
 .paste-panel textarea {
   font: 13px/1.4 var(--mono);
   padding: 8px;
-  border: var(--rule-4) solid var(--text-h);
-  border-radius: 0;
+  border: var(--rule-4) solid var(--border);
+  border-radius: 6px;
   background: var(--bg-subtle);
   color: var(--text-h);
   resize: vertical;
@@ -827,8 +827,8 @@ button.danger {
   font: inherit;
   font-size: 14px;
   padding: 6px 8px;
-  border: var(--rule-4) solid var(--text-h);
-  border-radius: 0;
+  border: var(--rule-4) solid var(--border);
+  border-radius: 6px;
   background: var(--bg);
   color: var(--text-h);
 }
@@ -937,8 +937,8 @@ button.danger {
 
 .log-past-brew-form {
   background: var(--bg-subtle);
-  border: var(--rule-4) solid var(--text-h);
-  border-radius: 0;
+  border: var(--rule-4) solid var(--border);
+  border-radius: 8px;
   padding: 12px;
   margin-bottom: 20px;
 }
@@ -979,8 +979,8 @@ button.danger {
   width: 70px;
   font: inherit;
   padding: 4px 6px;
-  border: var(--rule-4) solid var(--text-h);
-  border-radius: 0;
+  border: var(--rule-4) solid var(--border);
+  border-radius: 6px;
   background: var(--bg);
   color: var(--text-h);
 }
